@@ -1,9 +1,6 @@
-Shruthi-1, a digital/analog hybrid MIDI monosynth.
+This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth.
 
-This project is a redesign of the original Shruti-1, with a spec'ed up CPU,
-and a focus on easy upgrades/modification of the analog section.
-The ATMega644p allows new features in the firmware -- a larger selection of
-oscillator algorithms, a bigger selection of wavetables, and a tiny sequencer.
+This repository was originally a copy of the Mutable Instruments GitHub Shruthi-1 repository at https://github.com/pichenettes/shruthi-1
 
 Original developer: Olivier Gillet (ol.gillet@gmail.com)
 

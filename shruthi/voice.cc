@@ -427,7 +427,8 @@ inline void Voice::RenderOscillators() {
     
     // This is where we look up the list of most recently pressed notes for
     // the duophonic mode.
-    if (part.patch_.osc[0].option == OP_DUO && i == 0 && pitch_bass_note_) {
+    // BER NOTE: Duo voice allocation reverted to 0.96 behavior
+    if (part.patch_.osc[0].option == OP_DUO && i == 1 && pitch_bass_note_) {
       pitch -= pitch_value_;
       pitch += pitch_bass_note_;
     }
@@ -492,7 +493,10 @@ inline void Voice::RenderOscillators() {
       uint8_t shape = part.patch_.osc[1].shape;
       // The sub always plays the lowest note.
       if (part.patch_.osc[0].option == OP_DUO) {
-        if (!pitch_bass_note_) {
+        // BER NOTE: Duo voice allocation reverted to 0.96 behavior
+        if (pitch_bass_note_) {
+          sub_osc.set_increment(U24ShiftRight(increment));
+        } else {
           shape = 0;
         }
       }
