@@ -132,6 +132,7 @@ union OscillatorState {
   QuadSawPadState qs;
   CrushedSineState cr;
   uint16_t secondary_phase;
+  uint8_t last_output;
 };
 
 class Oscillator {
@@ -166,7 +167,7 @@ class Oscillator {
         RenderBandlimitedPwm(buffer);
       }
     } else {
-      uint8_t index = shape > WAVEFORM_VOWEL ? WAVEFORM_WAVETABLE_1 : shape;
+      uint8_t index = shape > WAVEFORM_FM_FB ? WAVEFORM_WAVETABLE_1 : shape;
       RenderFn fn;
       ResourcesManager::Load(fn_table_, index, &fn);
       (this->*fn)(buffer);

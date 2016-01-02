@@ -435,7 +435,8 @@ inline void Voice::RenderOscillators() {
     
     // -24 / +24 semitones by the range controller.
     int8_t range = 0;
-    if (part.patch_.osc[i].shape != WAVEFORM_FM) {
+    if (part.patch_.osc[i].shape != WAVEFORM_FM &&
+        part.patch_.osc[i].shape != WAVEFORM_FM_FB) {
       range += part.patch_.osc[i].range;
     }
     range += part.system_settings_.octave * 12;
