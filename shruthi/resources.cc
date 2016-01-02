@@ -391,6 +391,7 @@ static const prog_char str_res_8bits[] PROGMEM = "8bits";
 static const prog_char str_res_crush[] PROGMEM = "crush";
 static const prog_char str_res_pwm[] PROGMEM = "pwm";
 static const prog_char str_res_vowel[] PROGMEM = "vowel";
+static const prog_char str_res_qpwm[] PROGMEM = "qpwm";
 static const prog_char str_res_fmfb[] PROGMEM = "fmfb";
 static const prog_char str_res_belish[] PROGMEM = "belish";
 static const prog_char str_res_polatd[] PROGMEM = "polatd";
@@ -841,6 +842,7 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_pwm,
   str_res_noise,
   str_res_vowel,
+  str_res_qpwm,
   str_res_fmfb,
   str_res_belish,
   str_res_polatd,

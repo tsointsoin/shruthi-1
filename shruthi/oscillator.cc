@@ -433,6 +433,33 @@ void Oscillator::RenderDirtyPwm(uint8_t* buffer) {
   END_SAMPLE_LOOP
 }
 
+// ------- Quad Pwm (mit aliasing) -------------------------------------------
+void Oscillator::RenderQuadPwm(uint8_t* buffer) {
+  uint16_t phase_spread = (
+      static_cast<uint32_t>(phase_increment_.integral) * parameter_) >> 13;
+  ++phase_spread;
+  uint16_t phase_increment = phase_increment_.integral;
+  uint16_t increments[3];
+  for (uint8_t i = 0; i < 3; ++i) {
+    phase_increment += phase_spread;
+    increments[i] = phase_increment;
+  }
+  
+  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    data_.qs.phase[0] += increments[0];
+    data_.qs.phase[1] += increments[1];
+    data_.qs.phase[2] += increments[2];
+    uint8_t value = phase.integral < pwm_phase ? 0 : 63;
+    value += data_.qs.phase[0] < pwm_phase ? 0 : 63;
+    value += data_.qs.phase[1] < pwm_phase ? 0 : 63;
+    value += data_.qs.phase[2] < pwm_phase ? 0 : 63;
+    *buffer++ = value;
+  END_SAMPLE_LOOP
+}
+
+
 // ------- Quad saw (mit aliasing) -------------------------------------------
 void Oscillator::RenderQuadSawPad(uint8_t* buffer) {
   uint16_t phase_spread = (
@@ -524,6 +551,7 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderFilteredNoise,
 
   &Oscillator::RenderVowel,
+  &Oscillator::RenderQuadPwm,
   &Oscillator::RenderFm
 };
 
