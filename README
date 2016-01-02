@@ -1,4 +1,11 @@
-This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth.
+This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth. 
+Here's a short summary of changes compared to official firmware:
+- Duo mode voice allocation reverted to 0.96 behaviour
+- 'triangle' oscillator is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation
+- 'qpwm' oscillator added (modulation parameter affect both detuning of the four pwm oscillators and the pulse width)
+- 'fmfb' oscillator added (FM with increasing feedback modulation for modulation values above 64)
+
+Except for the explicit changes mentioned above and the fact that the wavetables above 'vowel' will have to be switched, patches made with the official firwmare should be reasonably compatible (no guarantees given though).
 
 This repository was originally a copy of the Mutable Instruments GitHub Shruthi-1 repository at https://github.com/pichenettes/shruthi-1
 
