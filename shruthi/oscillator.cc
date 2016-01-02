@@ -120,9 +120,7 @@ void Oscillator::RenderSimpleWavetable(uint8_t* buffer) {
 
   uint8_t wave_index = balance_index & 0xf;
   uint8_t base_resource_id = shape_ == WAVEFORM_SAW ?
-      WAV_RES_BANDLIMITED_SAW_0 :
-      (shape_ == WAVEFORM_SQUARE ? WAV_RES_BANDLIMITED_SQUARE_0  : 
-      WAV_RES_BANDLIMITED_TRIANGLE_0);
+      WAV_RES_BANDLIMITED_SAW_0 : WAV_RES_BANDLIMITED_SQUARE_0;
 
   const prog_uint8_t* wave_1 = waveform_table[base_resource_id + wave_index];
   wave_index = U8AddClip(wave_index, 1, kNumZonesFullSampleRate);
@@ -133,16 +131,16 @@ void Oscillator::RenderSimpleWavetable(uint8_t* buffer) {
     uint8_t sample = InterpolateTwoTables(
         wave_1, wave_2,
         phase.integral, gain_1, gain_2);
-    // To produce pulse width-modulated variants, we shift (saw) or set to
-    // a constant (triangle) a portion of the waveform within an increasingly
-    // large fraction of the period. Note that this is pure waveshapping - the
-    // phase information is not used to determine when/where to shift.
+    // To produce pulse width-modulated variants, we shift a portion of the 
+    // waveform within an increasingly large fraction of the period. 
+    // Note that this is pure waveshapping - the phase information is not 
+    // used to determine when/where to shift.
     //
-    //     /|            /|          /\             /\
-    //    / |           / |         /  \           /  \
-    //   /  |    =>  /|/  |        /    \  =>  ___/    \
-    //  /   |       /     |/      /      \
-    // /    |/                   /        \
+    //     /|            /|        
+    //    / |           / |        
+    //   /  |    =>  /|/  |    
+    //  /   |       /     |/    
+    // /    |/                  
     //
     if (sample < parameter_) {
       if (shape_ == WAVEFORM_SAW) {
@@ -341,9 +339,9 @@ void Oscillator::RenderCrushedSine(uint8_t* buffer) {
     } else {
       if (decimate >= 128 - parameter_) {
         decimate = 0;
-        held_sample = InterpolateSample(
-            wav_res_bandlimited_triangle_0,
-            phase.integral);
+        //BER:NOTE: Band limited triangle sacrificed for space
+        uint8_t tri = phase.integral >> 7;
+        held_sample = phase.integral & 0x8000 ? tri : ~tri;
       }
     }
     *buffer++ = held_sample;
@@ -406,6 +404,19 @@ void Oscillator::RenderVowel(uint8_t* buffer) {
     *buffer++ = x;
     *buffer++ = x;
     size--;
+  END_SAMPLE_LOOP
+}
+
+// ------- New Triangle (Non-band-limited and with different waveshaping) ----
+void Oscillator::RenderNewTriangle(uint8_t* buffer) {
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    uint8_t tri = phase.integral >> 7;
+    uint8_t v = phase.integral & 0x8000 ? tri : ~tri;
+    if (v < parameter_) { // fold triangle
+      v = (parameter_ << 1) - v;
+    }
+    *buffer++ = v;
   END_SAMPLE_LOOP
 }
 
@@ -480,7 +491,7 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
 
   &Oscillator::RenderSimpleWavetable,
   NULL,
-  &Oscillator::RenderSimpleWavetable,
+  &Oscillator::RenderNewTriangle,
 
   &Oscillator::RenderCzSaw,
   &Oscillator::RenderCzReso,

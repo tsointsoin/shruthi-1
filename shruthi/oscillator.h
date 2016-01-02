@@ -229,6 +229,8 @@ class Oscillator {
   void RenderQuadSawPad(uint8_t* buffer);
   void RenderFilteredNoise(uint8_t* buffer);
 
+  void RenderNewTriangle(uint8_t* buffer);
+
   DISALLOW_COPY_AND_ASSIGN(Oscillator);
 };
 
