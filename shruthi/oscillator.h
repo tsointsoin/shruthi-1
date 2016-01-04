@@ -132,7 +132,7 @@ union OscillatorState {
   QuadSawPadState qs;
   CrushedSineState cr;
   uint16_t secondary_phase;
-  uint8_t last_output;
+  uint8_t output_sample;
 };
 
 class Oscillator {
@@ -229,6 +229,7 @@ class Oscillator {
   void RenderDirtyPwm(uint8_t* buffer);
   void RenderQuadSawPad(uint8_t* buffer);
   void RenderFilteredNoise(uint8_t* buffer);
+  void RenderPolyBlep(uint8_t* buffer);
   void RenderQuadPwm(uint8_t* buffer);
   void RenderNewTriangle(uint8_t* buffer);
 

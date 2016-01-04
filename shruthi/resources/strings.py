@@ -433,6 +433,8 @@ crush
 pwm
 noise
 vowel
+pbsaw
+pbpwm
 qpwm
 fmfb
 belish

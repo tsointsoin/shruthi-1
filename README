@@ -4,6 +4,7 @@ Here's a short summary of changes compared to official firmware:
 - 'triangle' oscillator is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation
 - 'qpwm' oscillator added (modulation parameter affect both detuning of the four pwm oscillators and the pulse width)
 - 'fmfb' oscillator added (FM with increasing feedback modulation for modulation values above 64)
+- 'pbsaw' and 'pbpwm' oscillators added (Polyblep implementation inspired by Oliviers prototype for SMT)
 
 Except for the explicit changes mentioned above and the fact that the wavetables above 'vowel' will have to be switched, patches made with the official firwmare should be reasonably compatible (no guarantees given though).
 

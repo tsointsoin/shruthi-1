@@ -107,6 +107,8 @@ extern const prog_uint8_t wav_res_vowel_data[] PROGMEM;
 extern const prog_uint8_t wav_res_distortion[] PROGMEM;
 extern const prog_uint8_t wav_res_env_expo[] PROGMEM;
 extern const prog_uint8_t wav_res_ssm2164_linearization[] PROGMEM;
+extern const prog_uint8_t wav_res_division_table[] PROGMEM;
+extern const prog_uint8_t wav_res_blep_table[] PROGMEM;
 extern const prog_uint8_t wav_res_waves[] PROGMEM;
 extern const prog_uint8_t wav_res_wavetables[] PROGMEM;
 extern const prog_uint8_t wav_res_version[] PROGMEM;
@@ -505,62 +507,64 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define STR_RES_PWM 391  // pwm
 #define STR_RES___NOISE 392  // noise
 #define STR_RES_VOWEL 393  // vowel
-#define STR_RES_QPWM 394  // qpwm
-#define STR_RES_FMFB 395  // fmfb
-#define STR_RES_BELISH 396  // belish
-#define STR_RES_POLATD 397  // polatd
-#define STR_RES_CELLO 398  // cello
-#define STR_RES_CLPSWP 399  // clpswp
-#define STR_RES_FEMALE 400  // female
-#define STR_RES_FMTVOC 401  // fmtvoc
-#define STR_RES_FRMNT2 402  // frmnt2
-#define STR_RES_RES3HP 403  // res3hp
-#define STR_RES_ELECTP 404  // electp
-#define STR_RES_VIBES 405  // vibes
-#define STR_RES__LPF 406  // lpf
-#define STR_RES_SSM 407  // ssm
-#define STR_RES_SVF 408  // svf
-#define STR_RES_DSP 409  // dsp
-#define STR_RES_PVK 410  // pvk
-#define STR_RES_4PM 411  // 4pm
-#define STR_RES_DLY 412  // dly
-#define STR_RES_SP 413  // sp
-#define STR_RES_SPLASH 414  // splash
-#define STR_RES__FILTER 415  // filter
-#define STR_RES_PRESET 416  // preset
-#define STR_RES_EQUAL 417  // equal
-#define STR_RES_JUST 418  // just
-#define STR_RES_PYTHAG 419  // pythag
-#define STR_RES_1_4_EB 420  // 1/4 eb
-#define STR_RES_1_4_E 421  // 1/4 e
-#define STR_RES_1_4_EA 422  // 1/4 ea
-#define STR_RES_BHAIRA 423  // bhaira
-#define STR_RES_GUNAKR 424  // gunakr
-#define STR_RES_MARWA 425  // marwa
-#define STR_RES_SHREE 426  // shree
-#define STR_RES_PURVI 427  // purvi
-#define STR_RES_BILAWA 428  // bilawa
-#define STR_RES_YAMAN 429  // yaman
-#define STR_RES_KAFI 430  // kafi
-#define STR_RES_BHIMPA 431  // bhimpa
-#define STR_RES_DARBAR 432  // darbar
-#define STR_RES_BAGESH 433  // bagesh
-#define STR_RES_RAGESH 434  // ragesh
-#define STR_RES_KHAMAJ 435  // khamaj
-#define STR_RES_MIMAL 436  // mi'mal
-#define STR_RES_PARAME 437  // parame
-#define STR_RES_RANGES 438  // ranges
-#define STR_RES_GANGES 439  // ganges
-#define STR_RES_KAMESH 440  // kamesh
-#define STR_RES_PALAS_ 441  // palas
-#define STR_RES_NATBHA 442  // natbha
-#define STR_RES_M_KAUN 443  // m.kaun
-#define STR_RES_BAIRAG 444  // bairag
-#define STR_RES_B_TODI 445  // b.todi
-#define STR_RES_CHANDR 446  // chandr
-#define STR_RES_KAUSHI 447  // kaushi
-#define STR_RES_JOGESH 448  // jogesh
-#define STR_RES_RASIA 449  // rasia
+#define STR_RES_PBSAW 394  // pbsaw
+#define STR_RES_PBPWM 395  // pbpwm
+#define STR_RES_QPWM 396  // qpwm
+#define STR_RES_FMFB 397  // fmfb
+#define STR_RES_BELISH 398  // belish
+#define STR_RES_POLATD 399  // polatd
+#define STR_RES_CELLO 400  // cello
+#define STR_RES_CLPSWP 401  // clpswp
+#define STR_RES_FEMALE 402  // female
+#define STR_RES_FMTVOC 403  // fmtvoc
+#define STR_RES_FRMNT2 404  // frmnt2
+#define STR_RES_RES3HP 405  // res3hp
+#define STR_RES_ELECTP 406  // electp
+#define STR_RES_VIBES 407  // vibes
+#define STR_RES__LPF 408  // lpf
+#define STR_RES_SSM 409  // ssm
+#define STR_RES_SVF 410  // svf
+#define STR_RES_DSP 411  // dsp
+#define STR_RES_PVK 412  // pvk
+#define STR_RES_4PM 413  // 4pm
+#define STR_RES_DLY 414  // dly
+#define STR_RES_SP 415  // sp
+#define STR_RES_SPLASH 416  // splash
+#define STR_RES__FILTER 417  // filter
+#define STR_RES_PRESET 418  // preset
+#define STR_RES_EQUAL 419  // equal
+#define STR_RES_JUST 420  // just
+#define STR_RES_PYTHAG 421  // pythag
+#define STR_RES_1_4_EB 422  // 1/4 eb
+#define STR_RES_1_4_E 423  // 1/4 e
+#define STR_RES_1_4_EA 424  // 1/4 ea
+#define STR_RES_BHAIRA 425  // bhaira
+#define STR_RES_GUNAKR 426  // gunakr
+#define STR_RES_MARWA 427  // marwa
+#define STR_RES_SHREE 428  // shree
+#define STR_RES_PURVI 429  // purvi
+#define STR_RES_BILAWA 430  // bilawa
+#define STR_RES_YAMAN 431  // yaman
+#define STR_RES_KAFI 432  // kafi
+#define STR_RES_BHIMPA 433  // bhimpa
+#define STR_RES_DARBAR 434  // darbar
+#define STR_RES_BAGESH 435  // bagesh
+#define STR_RES_RAGESH 436  // ragesh
+#define STR_RES_KHAMAJ 437  // khamaj
+#define STR_RES_MIMAL 438  // mi'mal
+#define STR_RES_PARAME 439  // parame
+#define STR_RES_RANGES 440  // ranges
+#define STR_RES_GANGES 441  // ganges
+#define STR_RES_KAMESH 442  // kamesh
+#define STR_RES_PALAS_ 443  // palas
+#define STR_RES_NATBHA 444  // natbha
+#define STR_RES_M_KAUN 445  // m.kaun
+#define STR_RES_BAIRAG 446  // bairag
+#define STR_RES_B_TODI 447  // b.todi
+#define STR_RES_CHANDR 448  // chandr
+#define STR_RES_KAUSHI 449  // kaushi
+#define STR_RES_JOGESH 450  // jogesh
+#define STR_RES_RASIA 451  // rasia
 #define LUT_RES_LFO_INCREMENTS 0
 #define LUT_RES_LFO_INCREMENTS_SIZE 128
 #define LUT_RES_ENV_PORTAMENTO_INCREMENTS 1
@@ -691,11 +695,15 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define WAV_RES_ENV_EXPO_SIZE 257
 #define WAV_RES_SSM2164_LINEARIZATION 20
 #define WAV_RES_SSM2164_LINEARIZATION_SIZE 64
-#define WAV_RES_WAVES 21
+#define WAV_RES_DIVISION_TABLE 21
+#define WAV_RES_DIVISION_TABLE_SIZE 128
+#define WAV_RES_BLEP_TABLE 22
+#define WAV_RES_BLEP_TABLE_SIZE 128
+#define WAV_RES_WAVES 23
 #define WAV_RES_WAVES_SIZE 16383
-#define WAV_RES_WAVETABLES 22
+#define WAV_RES_WAVETABLES 24
 #define WAV_RES_WAVETABLES_SIZE 324
-#define WAV_RES_VERSION 23
+#define WAV_RES_VERSION 25
 #define WAV_RES_VERSION_SIZE 2
 #define CHR_RES_SPECIAL_CHARACTERS 0
 #define CHR_RES_SPECIAL_CHARACTERS_SIZE 56

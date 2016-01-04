@@ -391,6 +391,8 @@ static const prog_char str_res_8bits[] PROGMEM = "8bits";
 static const prog_char str_res_crush[] PROGMEM = "crush";
 static const prog_char str_res_pwm[] PROGMEM = "pwm";
 static const prog_char str_res_vowel[] PROGMEM = "vowel";
+static const prog_char str_res_pbsaw[] PROGMEM = "pbsaw";
+static const prog_char str_res_pbpwm[] PROGMEM = "pbpwm";
 static const prog_char str_res_qpwm[] PROGMEM = "qpwm";
 static const prog_char str_res_fmfb[] PROGMEM = "fmfb";
 static const prog_char str_res_belish[] PROGMEM = "belish";
@@ -842,6 +844,8 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_pwm,
   str_res_noise,
   str_res_vowel,
+  str_res_pbsaw,
+  str_res_pbpwm,
   str_res_qpwm,
   str_res_fmfb,
   str_res_belish,
@@ -1798,6 +1802,42 @@ const prog_uint8_t wav_res_ssm2164_linearization[] PROGMEM = {
       12,     12,     11,     10,     10,      9,      9,      8,
        7,      7,      6,      6,      5,      5,      4,      4,
        3,      3,      2,      2,      1,      1,      0,      0,
+};
+const prog_uint8_t wav_res_division_table[] PROGMEM = {
+     255,    254,    252,    250,    248,    246,    244,    242,
+     240,    239,    237,    235,    234,    232,    230,    229,
+     227,    225,    224,    222,    221,    219,    218,    217,
+     215,    214,    212,    211,    210,    208,    207,    206,
+     204,    203,    202,    201,    199,    198,    197,    196,
+     195,    193,    192,    191,    190,    189,    188,    187,
+     186,    185,    184,    183,    182,    181,    180,    179,
+     178,    177,    176,    175,    174,    173,    172,    171,
+     170,    169,    168,    168,    167,    166,    165,    164,
+     163,    163,    162,    161,    160,    159,    159,    158,
+     157,    156,    156,    155,    154,    153,    153,    152,
+     151,    151,    150,    149,    148,    148,    147,    146,
+     146,    145,    144,    144,    143,    143,    142,    141,
+     141,    140,    140,    139,    138,    138,    137,    137,
+     136,    135,    135,    134,    134,    133,    133,    132,
+     132,    131,    131,    130,    130,    129,    129,    128,
+};
+const prog_uint8_t wav_res_blep_table[] PROGMEM = {
+       0,      0,      0,      0,      0,      0,      0,      0,
+       0,      1,      1,      1,      1,      1,      2,      2,
+       2,      2,      3,      3,      3,      3,      4,      4,
+       4,      5,      5,      6,      6,      7,      7,      8,
+       8,      9,      9,     10,     10,     11,     11,     12,
+      12,     13,     14,     14,     15,     16,     17,     17,
+      18,     19,     20,     20,     21,     22,     23,     24,
+      24,     25,     26,     27,     28,     29,     30,     31,
+      32,     33,     34,     35,     36,     37,     38,     39,
+      40,     42,     43,     44,     45,     46,     48,     49,
+      50,     51,     53,     54,     55,     56,     58,     59,
+      60,     62,     63,     65,     66,     68,     69,     71,
+      72,     74,     75,     77,     78,     80,     81,     83,
+      84,     86,     88,     89,     91,     93,     95,     96,
+      98,    100,    102,    103,    105,    107,    109,    111,
+     112,    114,    116,    118,    120,    122,    124,    126,
 };
 const prog_uint8_t wav_res_waves[] PROGMEM = {
        2,      2,      2,      2,      2,      2,      2,      2,
@@ -3919,6 +3959,8 @@ const prog_uint8_t* const waveform_table[] = {
   wav_res_distortion,
   wav_res_env_expo,
   wav_res_ssm2164_linearization,
+  wav_res_division_table,
+  wav_res_blep_table,
   wav_res_waves,
   wav_res_wavetables,
   wav_res_version,

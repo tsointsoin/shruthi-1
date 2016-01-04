@@ -303,7 +303,7 @@ void Oscillator::RenderFm(uint8_t* buffer) {
   // the correct multiple of the carrier frequency.
   phase_.fractional = 0;
   uint16_t phase_2 = data_.secondary_phase;
-  uint8_t last_output = data_.last_output;
+  uint8_t last_output = data_.output_sample;
   uint8_t fb_phase_mod = 
     (shape_ == WAVEFORM_FM || parameter_ < 128) ? 0 : parameter_ - 128;
   BEGIN_SAMPLE_LOOP
@@ -317,7 +317,7 @@ void Oscillator::RenderFm(uint8_t* buffer) {
     *buffer++ = last_output;
   END_SAMPLE_LOOP
   data_.secondary_phase = phase_2;
-  data_.last_output = last_output;
+  data_.output_sample = last_output;
 }
 
 // ------- 8-bit land --------------------------------------------------------
@@ -431,6 +431,85 @@ void Oscillator::RenderDirtyPwm(uint8_t* buffer) {
     UPDATE_PHASE
     *buffer++ = (phase.integral >> 8) < 127 + parameter_ ? 0 : 255;
   END_SAMPLE_LOOP
+}
+
+// ------- Polyblep with Pwm and Saw support ---------------------------------
+// Heavily inspired by Oliviers experimental implementation for STM but
+// dumbed down and much less generic (does not do polyblep for sync etc)
+void Oscillator::RenderPolyBlep(uint8_t* buffer) {
+
+  // calculate (1/increment) for later multiplication with current phase
+  uint16_t div_table_index = phase_increment_.integral;
+  int8_t divshifts = 0;
+  while (div_table_index > 255) {
+    div_table_index >>= 1;
+    --divshifts;
+  }
+  while (div_table_index < 128) {
+    div_table_index <<= 1;
+    ++divshifts;
+  }
+  div_table_index -= 128;
+  uint8_t quotient = ResourcesManager::Lookup<uint8_t, uint8_t>(
+    wav_res_division_table, div_table_index);
+
+  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
+  uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
+  uint8_t next_sample = data_.output_sample;
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    uint8_t this_sample = next_sample;
+
+    // compute naive sample (BER:TODO: handle mixed waveforms)
+    next_sample =
+      shape_ == WAVEFORM_POLYBLEP_PWM ?
+      (phase.integral < pwm_phase ? 0 : 255) : //Pwm
+      (phase.integral >> 8); //Saw
+
+    if (phase.carry) {
+      uint16_t blep_index = phase.integral;
+      int8_t shifts = divshifts;
+      while (shifts < 0) {
+        blep_index >>= 1;
+        ++shifts;
+      }
+      while (shifts > 0) {
+        blep_index <<= 1;
+        --shifts;
+      }
+      blep_index = U16U8MulShift8(blep_index, quotient);
+
+      this_sample -= ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, blep_index);
+      next_sample += ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, 127-blep_index);
+
+    }
+    else if (shape_ == WAVEFORM_POLYBLEP_PWM && /*positive edge for Pwm only*/
+      phase.integral >= pwm_phase && phase.integral < pwm_phase_end) {
+      uint16_t blep_index = phase.integral - pwm_phase;
+      int8_t shifts = divshifts;
+      while (shifts < 0) {
+        blep_index >>= 1;
+        ++shifts;
+      }
+      while (shifts > 0) {
+        blep_index <<= 1;
+        --shifts;
+      }
+      blep_index = U16U8MulShift8(blep_index, quotient);
+
+      //BER:TODO: consider adding support for mix of saw and pwm
+      this_sample += ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, blep_index);
+      next_sample -= ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, 127-blep_index);
+    }
+
+    *buffer++ = this_sample;
+  END_SAMPLE_LOOP
+
+  data_.output_sample = next_sample;
 }
 
 // ------- Quad Pwm (mit aliasing) -------------------------------------------
@@ -551,6 +630,8 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderFilteredNoise,
 
   &Oscillator::RenderVowel,
+  &Oscillator::RenderPolyBlep,
+  &Oscillator::RenderPolyBlep,
   &Oscillator::RenderQuadPwm,
   &Oscillator::RenderFm
 };
