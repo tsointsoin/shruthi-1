@@ -108,7 +108,6 @@ sine = -numpy.sin(numpy.arange(WAVETABLE_SIZE + 1) / float(WAVETABLE_SIZE) * 2 *
 # Band limited waveforms.
 num_zones = (107 - 24) / 16 + 2
 bl_pulse_tables = []
-bl_square_tables = []
 bl_saw_tables = []
 
 wrap = numpy.fmod(numpy.arange(WAVETABLE_SIZE + 1) + WAVETABLE_SIZE / 2, WAVETABLE_SIZE)
@@ -136,15 +135,6 @@ for zone in range(num_zones):
   else:
     pulse = pulse[fill]
 
-  square = numpy.cumsum(pulse - pulse[wrap])
-  triangle = -numpy.cumsum(square[::-1] - square.mean()) / WAVETABLE_SIZE
-
-  square -= JUNINESS * triangle
-  if zone == num_zones - 1:
-    square = sine
-  bl_square_tables.append(('bandlimited_square_%d' % zone,
-                          Scale(square[quadrature])))
-
   saw = -numpy.cumsum(pulse[wrap] - pulse.mean())
   saw -= JUNINESS * numpy.cumsum(saw - saw.mean()) / WAVETABLE_SIZE
   if zone == num_zones - 1:
@@ -155,7 +145,6 @@ for zone in range(num_zones):
 
 
 waveforms.extend(bl_pulse_tables)
-waveforms.extend(bl_square_tables)
 waveforms.extend(bl_saw_tables)
 
 

@@ -62,65 +62,16 @@ void Oscillator::RenderSilence(uint8_t* buffer) {
   }
 }
 
-// ------- Band-limited PWM --------------------------------------------------
-void Oscillator::RenderBandlimitedPwm(uint8_t* buffer) {
-  uint8_t balance_index = U8Swap4(note_ - 12);
-  uint8_t gain_2 = balance_index & 0xf0;
-  uint8_t gain_1 = ~gain_2;
-
-  uint8_t wave_index = balance_index & 0xf;
-  const prog_uint8_t* wave_1 = waveform_table[
-      WAV_RES_BANDLIMITED_SAW_1 + wave_index];
-  wave_index = U8AddClip(wave_index, 1, kNumZonesHalfSampleRate);
-  const prog_uint8_t* wave_2 = waveform_table[
-      WAV_RES_BANDLIMITED_SAW_1 + wave_index];
-  
-  uint16_t shift = static_cast<uint16_t>(parameter_ + 128) << 8;
-  // For higher pitched notes, simply use 128
-  uint8_t scale = 192 - (parameter_ >> 1);
-  if (note_ > 64) {
-    scale = U8Mix(scale, 102, (note_ - 64) << 2);
-    scale = U8Mix(scale, 102, (note_ - 64) << 2);
-  }
-  
-  phase_increment_ = U24ShiftLeft(phase_increment_);
-  
-  BEGIN_SAMPLE_LOOP
-    phase = U24AddC(phase, phase_increment_int);
-    *sync_output_++ = phase.carry;
-    *sync_output_++ = 0;
-    if (sync_input_[0] || sync_input_[1]) {
-      phase.integral = 0;
-      phase.fractional = 0;
-    }
-    sync_input_ += 2;
-    
-    uint8_t a = InterpolateTwoTables(
-        wave_1, wave_2,
-        phase.integral, gain_1, gain_2);
-    a = U8U8MulShift8(a, scale);
-    uint8_t b = InterpolateTwoTables(
-        wave_1, wave_2,
-        phase.integral + shift, gain_1, gain_2);
-    b = U8U8MulShift8(b, scale);
-    a = a - b + 128;
-    *buffer++ = a;
-    *buffer++ = a;
-    size--;
-  END_SAMPLE_LOOP
-}
-
 // ------- Interpolation between two waveforms from two wavetables -----------
 // The position is determined by the note pitch, to prevent aliasing.
-
+// NOTE: This is now only used to preserve the original bandlimited Saw
 void Oscillator::RenderSimpleWavetable(uint8_t* buffer) {
   uint8_t balance_index = U8Swap4(note_ - 12);
   uint8_t gain_2 = balance_index & 0xf0;
   uint8_t gain_1 = ~gain_2;
 
   uint8_t wave_index = balance_index & 0xf;
-  uint8_t base_resource_id = shape_ == WAVEFORM_SAW ?
-      WAV_RES_BANDLIMITED_SAW_0 : WAV_RES_BANDLIMITED_SQUARE_0;
+  uint8_t base_resource_id = WAV_RES_BANDLIMITED_SAW_0;
 
   const prog_uint8_t* wave_1 = waveform_table[base_resource_id + wave_index];
   wave_index = U8AddClip(wave_index, 1, kNumZonesFullSampleRate);
@@ -143,13 +94,8 @@ void Oscillator::RenderSimpleWavetable(uint8_t* buffer) {
     // /    |/                  
     //
     if (sample < parameter_) {
-      if (shape_ == WAVEFORM_SAW) {
-        // Add a discontinuity.
-        sample += parameter_ >> 1;
-      } else {
-        // Clip.
-        sample = parameter_;
-      }
+      // Add a discontinuity.
+      sample += parameter_ >> 1;
     }
     *buffer++ = sample;
   END_SAMPLE_LOOP
@@ -453,20 +399,21 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
   uint8_t quotient = ResourcesManager::Lookup<uint8_t, uint8_t>(
     wav_res_division_table, div_table_index);
 
-  uint8_t mix_saw_pwm = shape_ == WAVEFORM_POLYBLEP_PWM ?
-    255 : // Pwm only
-    parameter_ << 1; // Parameter defines mix of Saw and Pwm
-  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
+  uint8_t mix_saw_pwm = 
+    note_ > 107 ? 0 : /* limit to avoid cpu overload */
+    (shape_ == WAVEFORM_POLYBLEP_PWM ? 255 : /* pure Pwm */
+     parameter_ << 1); /* parameter define mix of Saw and Pwm */
+  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8; //BER:TODO: consider constraining pwm for high notes to avoid weirdness
   uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
   uint8_t next_sample = data_.output_sample;
   BEGIN_SAMPLE_LOOP
     UPDATE_PHASE
     uint8_t this_sample = next_sample;
 
-    // compute naive sample
+    // compute naive Saw and Pwm samples (and mix accordingly)
     next_sample = U8Mix(
-      (phase.integral >> 8), //Saw
-      (phase.integral < pwm_phase ? 0 : 255), //Pwm
+      (phase.integral >> 8), 
+      (phase.integral < pwm_phase ? 0 : 255),
       mix_saw_pwm);
 
     if (phase.carry) {
@@ -604,8 +551,8 @@ void Oscillator::RenderFilteredNoise(uint8_t* buffer) {
 const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderSilence,
 
-  &Oscillator::RenderSimpleWavetable,
-  NULL,
+  &Oscillator::RenderPolyBlep,
+  &Oscillator::RenderPolyBlep,
   &Oscillator::RenderNewTriangle,
 
   &Oscillator::RenderCzSaw,
@@ -634,8 +581,7 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderFilteredNoise,
 
   &Oscillator::RenderVowel,
-  &Oscillator::RenderPolyBlep,
-  &Oscillator::RenderPolyBlep,
+  &Oscillator::RenderSimpleWavetable,
   &Oscillator::RenderQuadPwm,
   &Oscillator::RenderFm
 };

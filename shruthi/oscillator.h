@@ -158,20 +158,11 @@ class Oscillator {
     phase_increment_ = increment;
     sync_input_ = sync_input;
     sync_output_ = sync_output;
-    // A hack: when pulse width is set to 0, use a simple wavetable.
-    if (shape_ == WAVEFORM_SQUARE) {
-      uint8_t shape = shape_;
-      if (parameter_ == 0) {
-        RenderSimpleWavetable(buffer);
-      } else {
-        RenderBandlimitedPwm(buffer);
-      }
-    } else {
-      uint8_t index = shape > WAVEFORM_FM_FB ? WAVEFORM_WAVETABLE_1 : shape;
-      RenderFn fn;
-      ResourcesManager::Load(fn_table_, index, &fn);
-      (this->*fn)(buffer);
-    }
+    uint8_t index = shape > WAVEFORM_FM_FB ? WAVEFORM_WAVETABLE_1 : shape;
+    RenderFn fn;
+    ResourcesManager::Load(fn_table_, index, &fn);
+    (this->*fn)(buffer);
+
   }
   
   inline void set_parameter(uint8_t parameter) {
@@ -210,12 +201,6 @@ class Oscillator {
   uint8_t* sync_output_;
   
   void RenderSilence(uint8_t* buffer);
-  
-  // Since this is the most computationally expensive function, we still
-  // duplicated it into a "master" and a "slave" version for OSC1 and OSC2,
-  // with the corresponding oscillators sync code stripped away.
-  void RenderBandlimitedPwm(uint8_t* buffer);
-  
   void RenderSimpleWavetable(uint8_t* buffer);
   void RenderInterpolatedWavetable(uint8_t* buffer);
   void RenderSweepingWavetableRam(uint8_t* buffer);

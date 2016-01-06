@@ -314,7 +314,7 @@ compare
 ----
 
 v
-mutable    v1.02
+mutable   v1.02B
 instruments \x06\x07-1
 shruthi classic
 (4 knobs)
@@ -433,8 +433,7 @@ crush
 pwm
 noise
 vowel
-pbsaw
-pbpwm
+oldsaw
 qpwm
 fmfb
 belish

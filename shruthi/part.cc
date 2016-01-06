@@ -140,8 +140,8 @@ void Part::Init() {
 
 static const prog_char init_patch[] PROGMEM = {
     // Oscillators
-    WAVEFORM_SAW, 0, 0, 0,
-    WAVEFORM_SAW, 16, -12, 12,
+    WAVEFORM_POLYBLEP_SAW, 0, 0, 0,
+    WAVEFORM_POLYBLEP_SAW, 16, -12, 12,
     // Mixer
     32, 0, 0, WAVEFORM_SUB_OSC_SQUARE_1,
     // Filter
