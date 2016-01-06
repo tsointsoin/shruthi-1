@@ -453,6 +453,9 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
   uint8_t quotient = ResourcesManager::Lookup<uint8_t, uint8_t>(
     wav_res_division_table, div_table_index);
 
+  uint8_t mix_saw_pwm = shape_ == WAVEFORM_POLYBLEP_PWM ?
+    255 : // Pwm only
+    parameter_ << 1; // Parameter defines mix of Saw and Pwm
   uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
   uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
   uint8_t next_sample = data_.output_sample;
@@ -460,11 +463,11 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
     UPDATE_PHASE
     uint8_t this_sample = next_sample;
 
-    // compute naive sample (BER:TODO: handle mixed waveforms)
-    next_sample =
-      shape_ == WAVEFORM_POLYBLEP_PWM ?
-      (phase.integral < pwm_phase ? 0 : 255) : //Pwm
-      (phase.integral >> 8); //Saw
+    // compute naive sample
+    next_sample = U8Mix(
+      (phase.integral >> 8), //Saw
+      (phase.integral < pwm_phase ? 0 : 255), //Pwm
+      mix_saw_pwm);
 
     if (phase.carry) {
       uint16_t blep_index = phase.integral;
@@ -485,7 +488,7 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
         wav_res_blep_table, 127-blep_index);
 
     }
-    else if (shape_ == WAVEFORM_POLYBLEP_PWM && /*positive edge for Pwm only*/
+    else if (mix_saw_pwm > 0 && /*no positive edge for pure Saw*/
       phase.integral >= pwm_phase && phase.integral < pwm_phase_end) {
       uint16_t blep_index = phase.integral - pwm_phase;
       int8_t shifts = divshifts;
@@ -499,11 +502,12 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
       }
       blep_index = U16U8MulShift8(blep_index, quotient);
 
-      //BER:TODO: consider adding support for mix of saw and pwm
-      this_sample += ResourcesManager::Lookup<uint8_t, uint8_t>(
-        wav_res_blep_table, blep_index);
-      next_sample -= ResourcesManager::Lookup<uint8_t, uint8_t>(
-        wav_res_blep_table, 127-blep_index);
+      this_sample += U8U8MulShift8(
+        ResourcesManager::Lookup<uint8_t, uint8_t>(wav_res_blep_table, blep_index),
+        mix_saw_pwm /* scale blep to size of positive edge */);
+      next_sample -= U8U8MulShift8(
+        ResourcesManager::Lookup<uint8_t, uint8_t>(wav_res_blep_table, 127-blep_index),
+        mix_saw_pwm /* scale blep to size of positive edge */);
     }
 
     *buffer++ = this_sample;
