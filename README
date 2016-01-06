@@ -1,10 +1,24 @@
 This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth. 
-Here's a short summary of changes compared to official firmware:
-- Duo mode voice allocation reverted to 0.96 behaviour
-- 'triangle' oscillator is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation
-- 'qpwm' oscillator added (modulation parameter affect both detuning of the four pwm oscillators and the pulse width)
-- 'fmfb' oscillator added (FM with increasing feedback modulation for modulation values above 64)
-- 'pbsaw' and 'pbpwm' oscillators added (Polyblep implementation inspired by Oliviers prototype for SMT)
+
+Here's a short summary of changes compared to official Shruthi-1 firmware 1.02:
+
+* PolyBlep implementations replace the original bandlimited 'saw' and 'square' oscillators for higher fidelity and less memory footprint (Polyblep implementation inspired by Oliviers prototype for SMT). This primarily mean that the square oscillator now have proper PWM, i.e. more edginess, and no loudness drop for PWM modulation parameter above 0. Unlike the original saw oscillator, the modulation parameter now add mix of a square oscillator, and simultaneously defines the pulse width of this oscillator. 
+
+* Triangle oscillator ('triangle') is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation.
+
+* Added a quad PWM oscillator ('qpwm') very simlar to the quad saw ('pad'). The modulation parameter affect both detuning of the four pwm oscillators and the pulse width.
+
+* Added an alternative FM oscillator ('fmfb') with feedback modulation. Just as for the regular FM oscillator, the modulation parameter defines the FM amount, but for modulation values above 64 increasing amount of feedback is added. At moderate levels the feedback adds 'grit'. At higher settings it adds digital distortion (deliberately left in).
+
+* Duo mode voice allocation reverted to 0.96 behaviour (because I subjectively think it's more enjoyable):
+  press and hold C -> Osc1 plays C
+  press and hold E -> Osc2 plays C, Osc1 plays E 
+  (sub is assigned to lowest note)
+
+NOTES on patch compatibility with official 1.02 version: 
+- Due to qualitative differences of the 'saw' and 'square' oscillators levels etc may have to be adjusted somewhat to mimic original patch.
+- Because of the added oscillators, patches using the wavetables above 'vowel' will be different, and have to be manually adjusted.
+- If you really miss the 'saw' oscillator from the official firmware, this one is still available as 'oldsaw'. It's high-pass sampled and have a different character.
 
 Except for the explicit changes mentioned above and the fact that the wavetables above 'vowel' will have to be switched, patches made with the official firwmare should be reasonably compatible (no guarantees given though).
 
