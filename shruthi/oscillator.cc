@@ -399,11 +399,18 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
   uint8_t quotient = ResourcesManager::Lookup<uint8_t, uint8_t>(
     wav_res_division_table, div_table_index);
 
+  // For the 'saw' oscillator (only), the parameter define mix of Saw and Pwm
   uint8_t mix_saw_pwm = 
     note_ > 107 ? 0 : /* limit to avoid cpu overload */
-    (shape_ == WAVEFORM_POLYBLEP_PWM ? 255 : /* pure Pwm */
-     parameter_ << 1); /* parameter define mix of Saw and Pwm */
-  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8; //BER:TODO: consider constraining pwm for high notes to avoid weirdness
+    (shape_ == WAVEFORM_POLYBLEP_PWM ? 255 :
+     parameter_ << 1);
+  // PWM modulation is currently limited to extend over more than one increment 
+  // BER:TODO: Consider adding support for dual bleps at the same increment
+  uint8_t pwm_limit = 127 - (phase_increment_.integral >> 8);
+  uint16_t pwm_phase = 
+    (parameter_ < pwm_limit) ? /* prevent high and low edge at same increment */
+    static_cast<uint16_t>(127 + parameter_) << 8 :
+    static_cast<uint16_t>(127 + pwm_limit) << 8;
   uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
   uint8_t next_sample = data_.output_sample;
   BEGIN_SAMPLE_LOOP
