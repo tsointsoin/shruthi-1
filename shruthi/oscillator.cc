@@ -386,32 +386,33 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
 
   // calculate (1/increment) for later multiplication with current phase
   uint16_t div_table_index = phase_increment_.integral;
-  int8_t divshifts = 0;
+  int8_t quotient_shifts = 0; /* shifts for reasonable accuracy from small table */
   while (div_table_index > 255) {
     div_table_index >>= 1;
-    --divshifts;
+    --quotient_shifts;
   }
   while (div_table_index < 128) {
     div_table_index <<= 1;
-    ++divshifts;
+    ++quotient_shifts;
   }
   div_table_index -= 128;
   uint8_t quotient = ResourcesManager::Lookup<uint8_t, uint8_t>(
     wav_res_division_table, div_table_index);
 
-  // For the 'saw' oscillator (only), the parameter define mix of Saw and Pwm
+  // For the 'saw' oscillator (only) parameter define mix of Saw and Pwm
   uint8_t mix_saw_pwm = 
-    note_ > 107 ? 0 : /* limit to avoid cpu overload */
-    (shape_ == WAVEFORM_POLYBLEP_PWM ? 255 :
-     parameter_ << 1);
-  // PWM modulation is currently limited to extend over more than one increment 
+    note_ > 107 ? 0 : /* revert to saw (=single blep) to  avoid cpu overload */
+    (shape_ == WAVEFORM_POLYBLEP_PWM ? 255 : parameter_ << 1);
+     
+  // PWM modulation is currently required to extend over at least one increment 
   // BER:TODO: Consider adding support for dual bleps at the same increment
   uint8_t pwm_limit = 127 - (phase_increment_.integral >> 8);
   uint16_t pwm_phase = 
-    (parameter_ < pwm_limit) ? /* prevent high and low edge at same increment */
+    (parameter_ < pwm_limit) ? /* prevent dual bleps at same increment */
     static_cast<uint16_t>(127 + parameter_) << 8 :
     static_cast<uint16_t>(127 + pwm_limit) << 8;
   uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
+  
   uint8_t next_sample = data_.output_sample;
   BEGIN_SAMPLE_LOOP
     UPDATE_PHASE
@@ -425,7 +426,7 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
 
     if (phase.carry) {
       uint16_t blep_index = phase.integral;
-      int8_t shifts = divshifts;
+      int8_t shifts = quotient_shifts;
       while (shifts < 0) {
         blep_index >>= 1;
         ++shifts;
@@ -445,7 +446,7 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
     else if (mix_saw_pwm > 0 && /*no positive edge for pure Saw*/
       phase.integral >= pwm_phase && phase.integral < pwm_phase_end) {
       uint16_t blep_index = phase.integral - pwm_phase;
-      int8_t shifts = divshifts;
+      int8_t shifts = quotient_shifts;
       while (shifts < 0) {
         blep_index >>= 1;
         ++shifts;
