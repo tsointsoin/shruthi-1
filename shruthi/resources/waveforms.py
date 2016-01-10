@@ -202,7 +202,9 @@ waveforms.append(
     ('ssm2164_linearization', delay_gains.astype(int))
 )
 
-# Create table of x^-1 used for crude division calculations
+"""----------------------------------------------------------------------------
+Create table of x^-1 used for crude division calculations
+----------------------------------------------------------------------------"""
 quotients = numpy.arange(256, 512, 2)
 divisions = 65535.0 / quotients;
 divisions = divisions.astype(int)
@@ -210,10 +212,11 @@ waveforms.append(
     ('division_table', divisions)
 )
 
-# Create table of x^2 used in polyblep calculations
-blepsteps = numpy.arange(0, 128, 1)
-bleptable = (blepsteps/128.0) * (blepsteps/128.0) * 128.0
-bleptable = numpy.round(bleptable).astype(int)
+"""----------------------------------------------------------------------------
+Create table of x^2 used in polyblep calculations
+----------------------------------------------------------------------------"""
+bleptable = numpy.linspace(0.0, 1.0, 128) ** 2.0
+bleptable = numpy.round(127*bleptable).astype(int)
 waveforms.append(
     ('blep_table', bleptable)
 )
