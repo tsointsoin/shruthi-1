@@ -411,7 +411,7 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
     (parameter_ < pwm_limit) ? /* prevent dual bleps at same increment */
     static_cast<uint16_t>(127 + parameter_) << 8 :
     static_cast<uint16_t>(127 + pwm_limit) << 8;
-  uint16_t pwm_phase_end = pwm_phase + phase_increment_.integral;
+  uint8_t high = phase_.integral >= pwm_phase;
   
   uint8_t next_sample = data_.output_sample;
   BEGIN_SAMPLE_LOOP
@@ -425,6 +425,7 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
       mix_saw_pwm);
 
     if (phase.carry) {
+      high = false;
       uint16_t blep_index = phase.integral;
       int8_t shifts = quotient_shifts;
       while (shifts < 0) {
@@ -444,7 +445,8 @@ void Oscillator::RenderPolyBlep(uint8_t* buffer) {
 
     }
     else if (mix_saw_pwm > 0 && /*no positive edge for pure Saw*/
-      phase.integral >= pwm_phase && phase.integral < pwm_phase_end) {
+      phase.integral >= pwm_phase && !high) {
+      high = true;
       uint16_t blep_index = phase.integral - pwm_phase;
       int8_t shifts = quotient_shifts;
       while (shifts < 0) {
