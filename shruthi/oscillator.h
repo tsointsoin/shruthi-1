@@ -158,7 +158,7 @@ class Oscillator {
     phase_increment_ = increment;
     sync_input_ = sync_input;
     sync_output_ = sync_output;
-    uint8_t index = shape > WAVEFORM_FM_FB ? WAVEFORM_WAVETABLE_1 : shape;
+    uint8_t index = shape >= WAVEFORM_WAVETABLE_9 ? WAVEFORM_WAVETABLE_1 : shape;
     RenderFn fn;
     ResourcesManager::Load(fn_table_, index, &fn);
     (this->*fn)(buffer);

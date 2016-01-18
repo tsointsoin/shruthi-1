@@ -1,10 +1,12 @@
+YAM - Yet Another Mutation
+
 This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth. 
 
 Here's a short summary of changes _compared_ to official Shruthi-1 firmware 1.02:
 
-* PolyBlep implementations replace the original bandlimited 'saw' and 'square' oscillators for higher fidelity and less memory footprint (Polyblep implementation inspired by Oliviers prototype for SMT). For 'square' this primarily mean that the oscillator now have a more proper PWM, i.e. more edginess, and no loudness drop for PWM modulation parameter above 0. For 'saw' there is no gentle pre high pass filtering and the modulation is different. The parameter now add mix of a square oscillator to the saw, and simultaneously defines the pulse width modulation of this oscillator. 
+* PolyBlep implementations replace the original bandlimited 'saw' and 'square' oscillators for higher fidelity and less memory footprint (Polyblep implementation inspired by, but less general than, Oliviers prototype for STM). For 'square' this primarily mean that the oscillator now have a more proper sounding PWM, i.e. more edginess, and no loudness drop for PWM modulation parameter above 0. For 'saw' there is no gentle pre high pass filtering and the modulation is different. The parameter now add mix of a square oscillator to the saw, and simultaneously defines the pulse width modulation of this oscillator (Note that this modulation is subject to change in future versions). 
 
-* Triangle oscillator ('triangle') is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation.
+* Triangle oscillator ('triangle') is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation. This also means that the 'crush' oscillator is slightly different sounding.
 
 * Added a quad PWM oscillator ('qpwm') very simlar to the quad saw ('pad'). The modulation parameter affect both detuning of the four pwm oscillators and the pulse width.
 
@@ -15,11 +17,11 @@ Here's a short summary of changes _compared_ to official Shruthi-1 firmware 1.02
   Press and hold E -> Osc2 plays C, Osc1 plays E 
   (Sub is assigned to lowest note)
 
-THERE ARE NO GUARANTEES FOR FULL BACKWARDS COMPATIBILITY!
-Some comments on patch compatibility with official 1.02 version: 
-- Due to qualitative differences of the 'saw' and 'square' oscillators levels etc may have to be adjusted somewhat to mimic original patch.
-- Because of the added oscillators, patches using the wavetables above 'vowel' will be different, and have to be manually adjusted.
-- If you really miss the 'saw' oscillator from the official firmware, this one is still available as 'oldsaw'. It's high-pass sampled and have a different character.
+SOME TIPS ON PATCH COMPATIBILITY WITH OFFICIAL Shruthi-1 FIRMWARE: 
+- Due to qualitative differences of the 'saw' and 'square' oscillators etc, levels may have to be adjusted somewhat to mimic original patches.
+- Because of the added oscillators, patches using the wavetables above 'vowel' will be different, and have to be manually adjusted for legacy patches.
+- If you really miss the original 'saw' oscillator from the official firmware, this one is still available as 'oldsaw'. It's high-pass sampled and have a different character.
+
 
 This repository was originally a copy of the Mutable Instruments GitHub Shruthi-1 repository at https://github.com/pichenettes/shruthi-1
 
