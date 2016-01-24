@@ -168,7 +168,7 @@ void Oscillator::RenderCzSaw(uint8_t* buffer) {
   BEGIN_SAMPLE_LOOP
     UPDATE_PHASE_MORE_REGISTERS
     uint8_t phi = phase.integral >> 8;
-    uint8_t clipped_phi = phi < 0x20 ? phi << 3 : 0xff;
+    uint8_t clipped_phi = phase.integral < 0x2000 ? phase.integral >> 5 : 0xff;
     // Interpolation causes more aliasing here.
     *buffer++ = ReadSample(wav_res_sine,
         U8MixU16(phi, clipped_phi, parameter_ << 1));
