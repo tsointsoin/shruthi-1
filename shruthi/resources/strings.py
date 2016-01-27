@@ -314,7 +314,7 @@ compare
 ----
 
 v
-mutable  YAM0.01
+mutable  YAM0.02
 instruments \x06\x07-1
 shruthi classic
 (4 knobs)
