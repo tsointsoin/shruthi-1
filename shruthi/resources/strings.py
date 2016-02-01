@@ -314,7 +314,7 @@ compare
 ----
 
 v
-mutable  YAM0.02
+mutable  YAM0.03
 instruments \x06\x07-1
 shruthi classic
 (4 knobs)
@@ -433,9 +433,6 @@ crush
 pwm
 noise
 vowel
-oldsaw
-qpwm
-fmfb
 belish
 polatd
 cello
@@ -446,6 +443,10 @@ frmnt2
 res3hp
 electp
 vibes
+wavquence
+oldsaw
+qpwm
+fmfb
 
  lpf
 ssm

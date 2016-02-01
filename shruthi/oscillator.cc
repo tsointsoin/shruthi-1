@@ -590,6 +590,16 @@ void Oscillator::RenderFilteredNoise(uint8_t* buffer) {
   data_.no.rng_state = rng_state;
 }
 
+// The position is freely determined by the parameter
+void Oscillator::RenderWavequence(uint8_t* buffer) {
+  const prog_uint8_t* wave = wav_res_waves + U8U8Mul(
+      parameter_,
+      129);
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    *buffer++ = InterpolateSample(wave, phase.integral >> 1);
+  END_SAMPLE_LOOP
+}
 
 /* static */
 const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
@@ -625,6 +635,8 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderFilteredNoise,
 
   &Oscillator::RenderVowel,
+  
+  &Oscillator::RenderInterpolatedWavetable,
   &Oscillator::RenderSimpleWavetable,
   &Oscillator::RenderQuadPwm,
   &Oscillator::RenderFm

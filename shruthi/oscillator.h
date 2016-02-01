@@ -158,9 +158,17 @@ class Oscillator {
     phase_increment_ = increment;
     sync_input_ = sync_input;
     sync_output_ = sync_output;
-    uint8_t index = shape >= WAVEFORM_WAVETABLE_9 ? WAVEFORM_WAVETABLE_1 : shape;
+    uint8_t index = 
+      shape >= WAVEFORM_WAVETABLE_9 ?
+      (shape <= WAVEFORM_WAVEQUENCE ?
+        WAVEFORM_WAVETABLE_1 :
+        shape - WAVEFORM_WAVEQUENCE + WAVEFORM_WAVETABLE_9) : 
+        shape;
     RenderFn fn;
     ResourcesManager::Load(fn_table_, index, &fn);
+    if (shape_ == WAVEFORM_WAVEQUENCE) {
+      fn = &Oscillator::RenderWavequence;
+    }
     (this->*fn)(buffer);
 
   }
@@ -218,6 +226,7 @@ class Oscillator {
   void RenderPolyBlepPwm(uint8_t* buffer);
   void RenderQuadPwm(uint8_t* buffer);
   void RenderNewTriangle(uint8_t* buffer);
+  void RenderWavequence(uint8_t* buffer);
 
   DISALLOW_COPY_AND_ASSIGN(Oscillator);
 };
