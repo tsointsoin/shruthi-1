@@ -1,16 +1,22 @@
-YAM - Yet Another Mutation
+Y A M - Yet Another Mutation
 
 This is a project for various firmware modifications and hacks for Shruthi-1, a digital/analog hybrid MIDI monosynth. 
 
 Here's a short summary of changes _compared_ to official Shruthi-1 firmware 1.02:
 
-* PolyBlep implementations replace the original band-limited 'saw' and 'square' oscillators for higher fidelity and less memory footprint (Polyblep implementation inspired by, but less general than, Oliviers prototype for STM). For 'square' this primarily mean that the oscillator now have a more proper sounding PWM, i.e. more edginess, and no loudness drop for PWM modulation parameter above 0. For 'saw' there is no gentle high pass pre-filtering and the modulation is different. The parameter for saw now add mix of a 2nd saw edge, resulting in a saw with sub oscillator (actually super oscillator) sound. 
+* PolyBlep implementations replace the original band-limited 'saw' and 'square' oscillators for higher fidelity and less memory footprint (Polyblep implementations inspired by, but less general than, Oliviers prototype for STM). 
 
-* Triangle oscillator ('triangle') is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation. This also means that the 'crush' oscillator is slightly different sounding.
+* 'square' is now a Polyblep oscillator with a more proper sounding PWM, i.e. more edginess, and no loudness drop for PWM modulation parameter above 0. 
+
+* 'saw' is now a Polyblep oscillator (withuot any high pass pre-filtering and the modulation is different). The parameter for saw now add mix of a 2nd saw edge, resulting in a saw with sub oscillator (actually super oscillator) sound. 
+
+* 'triangle' is no longer band-limited (to reduce memory footprint) and is folded (instead of clipped) upon modulation. This also means that the 'crush' oscillator is slightly different sounding.
 
 * Added a quad PWM oscillator ('qpwm') very similar to the quad saw ('pad'). The modulation parameter simultaneously affect both detuning of the four pwm oscillators, and the pulse width.
 
 * Added an alternative FM oscillator ('fmfb') with feedback modulation. Just as for the regular FM oscillator, the modulation parameter defines the FM amount, but for modulation values above 64 increasing amount of feedback is added. At moderate levels the feedback adds 'grit'. At higher settings it adds digital distortion (deliberately left in).
+
+* Added a 'csaw' oscillator very similar to the CS-80 inspired saw oscillator for Braids. Without modulation it's a plain saw (identical to 'saw'). Modulation adds a 'notch' discontinuity before the ramp.
 
 * Added 'wavquence' oscillator (simply ported from the official Ambika firmware).
 
