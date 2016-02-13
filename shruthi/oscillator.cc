@@ -506,8 +506,8 @@ void Oscillator::RenderPolyBlepPwm(uint8_t* buffer) {
   data_.output_sample = next_sample;
 }
 
-// ------- Quad Pwm (mit aliasing) -------------------------------------------
-void Oscillator::RenderQuadPwm(uint8_t* buffer) {
+// ------- Quad saw or pwm (mit aliasing) ------------------------------------
+void Oscillator::RenderQuad(uint8_t* buffer) {
   uint16_t phase_spread = (
       static_cast<uint32_t>(phase_increment_.integral) * parameter_) >> 13;
   ++phase_spread;
@@ -518,44 +518,33 @@ void Oscillator::RenderQuadPwm(uint8_t* buffer) {
     increments[i] = phase_increment;
   }
   
-  uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
-  BEGIN_SAMPLE_LOOP
-    UPDATE_PHASE
-    data_.qs.phase[0] += increments[0];
-    data_.qs.phase[1] += increments[1];
-    data_.qs.phase[2] += increments[2];
-    uint8_t value = phase.integral < pwm_phase ? 0 : 63;
-    value += data_.qs.phase[0] < pwm_phase ? 0 : 63;
-    value += data_.qs.phase[1] < pwm_phase ? 0 : 63;
-    value += data_.qs.phase[2] < pwm_phase ? 0 : 63;
-    *buffer++ = value;
-  END_SAMPLE_LOOP
-}
-
-
-// ------- Quad saw (mit aliasing) -------------------------------------------
-void Oscillator::RenderQuadSawPad(uint8_t* buffer) {
-  uint16_t phase_spread = (
-      static_cast<uint32_t>(phase_increment_.integral) * parameter_) >> 13;
-  ++phase_spread;
-  uint16_t phase_increment = phase_increment_.integral;
-  uint16_t increments[3];
-  for (uint8_t i = 0; i < 3; ++i) {
-    phase_increment += phase_spread;
-    increments[i] = phase_increment;
+  if (shape_ == WAVEFORM_QUAD_SAW_PAD) {
+    BEGIN_SAMPLE_LOOP
+      UPDATE_PHASE
+      data_.qs.phase[0] += increments[0];
+      data_.qs.phase[1] += increments[1];
+      data_.qs.phase[2] += increments[2];
+      uint8_t value = (phase.integral >> 10);
+      value += (data_.qs.phase[0] >> 10);
+      value += (data_.qs.phase[1] >> 10);
+      value += (data_.qs.phase[2] >> 10);
+      *buffer++ = value;
+    END_SAMPLE_LOOP
   }
-  
-  BEGIN_SAMPLE_LOOP
-    UPDATE_PHASE
-    data_.qs.phase[0] += increments[0];
-    data_.qs.phase[1] += increments[1];
-    data_.qs.phase[2] += increments[2];
-    uint8_t value = (phase.integral >> 10);
-    value += (data_.qs.phase[0] >> 10);
-    value += (data_.qs.phase[1] >> 10);
-    value += (data_.qs.phase[2] >> 10);
-    *buffer++ = value;
-  END_SAMPLE_LOOP
+  else { //WAVEFORM_QUAD_PWM
+    uint16_t pwm_phase = static_cast<uint16_t>(127 + parameter_) << 8;
+    BEGIN_SAMPLE_LOOP
+      UPDATE_PHASE
+      data_.qs.phase[0] += increments[0];
+      data_.qs.phase[1] += increments[1];
+      data_.qs.phase[2] += increments[2];
+      uint8_t value = phase.integral < pwm_phase ? 0 : 63;
+      value += data_.qs.phase[0] < pwm_phase ? 0 : 63;
+      value += data_.qs.phase[1] < pwm_phase ? 0 : 63;
+      value += data_.qs.phase[2] < pwm_phase ? 0 : 63;
+      *buffer++ = value;
+    END_SAMPLE_LOOP
+  }
 }
 
 // ------- Low-passed, then high-passed white noise --------------------------
@@ -614,7 +603,7 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderCzPulseReso,
   &Oscillator::RenderCzReso,
 
-  &Oscillator::RenderQuadSawPad,
+  &Oscillator::RenderQuad,
 
   &Oscillator::RenderFm,
 
@@ -637,7 +626,7 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   
   &Oscillator::RenderInterpolatedWavetable,
   &Oscillator::RenderSimpleWavetable,
-  &Oscillator::RenderQuadPwm,
+  &Oscillator::RenderQuad,
   &Oscillator::RenderFm
 };
 
