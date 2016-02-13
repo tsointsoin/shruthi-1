@@ -109,6 +109,16 @@ X.X.X
 X.XXX
 X...X
 .....
+""",
+"""
+.X.X.
+XXXXX
+XXXXX
+X.X.X
+XXXXX
+XXXXX
+X.X.X
+.....
 """]
 
 

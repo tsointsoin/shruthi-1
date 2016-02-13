@@ -391,7 +391,7 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define STR_RES_COMPARE 281  // compare
 #define STR_RES_ 282  // ----
 #define STR_RES_V 283  // v
-#define STR_RES_MUTABLE__YAM0_03 284  // mutable  YAM0.03
+#define STR_RES_MUTABLE___YA8_03 284  // mutable   YA.03
 #define STR_RES_INSTRUMENTS_671 285  // instruments -1
 #define STR_RES_SHRUTHI_CLASSIC 286  // shruthi classic
 #define STR_RES_4_KNOBS 287  // (4 knobs)
@@ -686,7 +686,7 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define WAV_RES_VERSION 18
 #define WAV_RES_VERSION_SIZE 2
 #define CHR_RES_SPECIAL_CHARACTERS 0
-#define CHR_RES_SPECIAL_CHARACTERS_SIZE 56
+#define CHR_RES_SPECIAL_CHARACTERS_SIZE 64
 typedef avrlib::ResourcesManager<
     ResourceId,
     avrlib::ResourcesTables<

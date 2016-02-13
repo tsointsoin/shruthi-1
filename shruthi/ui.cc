@@ -61,7 +61,7 @@ void Ui::Init() {
 
   lcd.Init();
   display.Init();
-  lcd.SetCustomCharMapRes(character_table[0], 7, 1);
+  lcd.SetCustomCharMapRes(character_table[0], (CHR_RES_SPECIAL_CHARACTERS_SIZE / 8), 1);
 
   editor.Init();
   queue_.Flush();
