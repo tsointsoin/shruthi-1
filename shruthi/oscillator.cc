@@ -317,9 +317,8 @@ void Oscillator::RenderCrushedSine(uint8_t* buffer) {
     } else {
       if (decimate >= 128 - parameter_) {
         decimate = 0;
-        //BER:NOTE: Band limited triangle sacrificed for space
         uint8_t tri = phase.integral >> 7;
-        held_sample = phase.integral & 0x8000 ? tri : ~tri;
+        held_sample = phase.integral & 0x8000 ? ~tri : tri;
       }
     }
     *buffer++ = held_sample;
