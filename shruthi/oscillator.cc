@@ -454,6 +454,60 @@ void Oscillator::RenderPolyBlepSaw(uint8_t* buffer) {
   data_.output_sample = next_sample;
 }
 
+// ------- Polyblep CS-80 Saw ------------------------------------------------
+// Heavily inspired by Oliviers experimental implementation for STM but
+// dumbed down and much less generic (does not do polyblep for sync etc)
+void Oscillator::RenderPolyBlepCSaw(uint8_t* buffer) {
+
+  // calculate (1/increment) for later multiplication with current phase
+  CALCULATE_DIVISION_FACTOR(phase_increment_.integral, quotient, quotient_shifts)
+
+  // Revert to pure saw (=single blep) to avoid cpu overload for high notes
+  uint8_t revert_to_saw = note_ > 107;
+
+  // PWM modulation (constrained to extend over at least one increment)
+  uint8_t pwm_limit = phase_increment_.integral >> 8;
+  uint16_t pwm_phase =
+    (parameter_ > 0 && parameter_ < pwm_limit) ?
+    static_cast<uint16_t>(pwm_limit) << 8 :
+    static_cast<uint16_t>(parameter_) << 8;
+  uint8_t high = phase_.integral >= pwm_phase;
+
+  uint8_t next_sample = data_.output_sample;
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    uint8_t this_sample = next_sample;
+
+    // Compute naive waveform
+    next_sample = (revert_to_saw || phase.integral >= pwm_phase) ?
+      (phase.integral >> 8) : 0;
+
+    if (phase.carry) {
+      high = false;
+      CALCULATE_BLEP_INDEX(phase.integral, quotient, quotient_shifts, blep_index)
+      this_sample -= ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, blep_index);
+      next_sample += ResourcesManager::Lookup<uint8_t, uint8_t>(
+        wav_res_blep_table, 127-blep_index);
+    }
+    else if (!revert_to_saw && /* no positive edge for pure saw */
+      phase.integral >= pwm_phase && !high) {
+      high = true;
+      CALCULATE_BLEP_INDEX(phase.integral-pwm_phase, quotient, quotient_shifts, blep_index)
+      this_sample += U8U8MulShift8(
+        ResourcesManager::Lookup<uint8_t, uint8_t>(wav_res_blep_table, blep_index),
+        parameter_ /* scale blep to size of edge */);
+      next_sample -= U8U8MulShift8(
+        ResourcesManager::Lookup<uint8_t, uint8_t>(wav_res_blep_table, 127-blep_index),
+        parameter_ /* scale blep to size of edge */);
+    }
+
+    *buffer++ = this_sample;
+  END_SAMPLE_LOOP
+
+  data_.output_sample = next_sample;
+}
+
 // ------- Polyblep Pwm ------------------------------------------------------
 // Heavily inspired by Oliviers experimental implementation for STM but
 // dumbed down and much less generic (does not do polyblep for sync etc)
@@ -627,7 +681,8 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderInterpolatedWavetable,
   &Oscillator::RenderSimpleWavetable,
   &Oscillator::RenderQuad,
-  &Oscillator::RenderFm
+  &Oscillator::RenderFm,
+  &Oscillator::RenderPolyBlepCSaw
 };
 
 }  // namespace shruthi

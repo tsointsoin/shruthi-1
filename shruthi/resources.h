@@ -391,7 +391,7 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define STR_RES_COMPARE 281  // compare
 #define STR_RES_ 282  // ----
 #define STR_RES_V 283  // v
-#define STR_RES_MUTABLE___YA8_03 284  // mutable   YA.03
+#define STR_RES_MUTABLE___YA8_04 284  // mutable   YA.04
 #define STR_RES_INSTRUMENTS_671 285  // instruments -1
 #define STR_RES_SHRUTHI_CLASSIC 286  // shruthi classic
 #define STR_RES_4_KNOBS 287  // (4 knobs)
@@ -515,50 +515,51 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define STR_RES_OLDSAW 405  // oldsaw
 #define STR_RES_QPWM 406  // qpwm
 #define STR_RES_FMFB 407  // fmfb
-#define STR_RES__LPF 408  // lpf
-#define STR_RES_SSM 409  // ssm
-#define STR_RES_SVF 410  // svf
-#define STR_RES_DSP 411  // dsp
-#define STR_RES_PVK 412  // pvk
-#define STR_RES_4PM 413  // 4pm
-#define STR_RES_DLY 414  // dly
-#define STR_RES_SP 415  // sp
-#define STR_RES_SPLASH 416  // splash
-#define STR_RES__FILTER 417  // filter
-#define STR_RES_PRESET 418  // preset
-#define STR_RES_EQUAL 419  // equal
-#define STR_RES_JUST 420  // just
-#define STR_RES_PYTHAG 421  // pythag
-#define STR_RES_1_4_EB 422  // 1/4 eb
-#define STR_RES_1_4_E 423  // 1/4 e
-#define STR_RES_1_4_EA 424  // 1/4 ea
-#define STR_RES_BHAIRA 425  // bhaira
-#define STR_RES_GUNAKR 426  // gunakr
-#define STR_RES_MARWA 427  // marwa
-#define STR_RES_SHREE 428  // shree
-#define STR_RES_PURVI 429  // purvi
-#define STR_RES_BILAWA 430  // bilawa
-#define STR_RES_YAMAN 431  // yaman
-#define STR_RES_KAFI 432  // kafi
-#define STR_RES_BHIMPA 433  // bhimpa
-#define STR_RES_DARBAR 434  // darbar
-#define STR_RES_BAGESH 435  // bagesh
-#define STR_RES_RAGESH 436  // ragesh
-#define STR_RES_KHAMAJ 437  // khamaj
-#define STR_RES_MIMAL 438  // mi'mal
-#define STR_RES_PARAME 439  // parame
-#define STR_RES_RANGES 440  // ranges
-#define STR_RES_GANGES 441  // ganges
-#define STR_RES_KAMESH 442  // kamesh
-#define STR_RES_PALAS_ 443  // palas
-#define STR_RES_NATBHA 444  // natbha
-#define STR_RES_M_KAUN 445  // m.kaun
-#define STR_RES_BAIRAG 446  // bairag
-#define STR_RES_B_TODI 447  // b.todi
-#define STR_RES_CHANDR 448  // chandr
-#define STR_RES_KAUSHI 449  // kaushi
-#define STR_RES_JOGESH 450  // jogesh
-#define STR_RES_RASIA 451  // rasia
+#define STR_RES_CSAW 408  // csaw
+#define STR_RES__LPF 409  // lpf
+#define STR_RES_SSM 410  // ssm
+#define STR_RES_SVF 411  // svf
+#define STR_RES_DSP 412  // dsp
+#define STR_RES_PVK 413  // pvk
+#define STR_RES_4PM 414  // 4pm
+#define STR_RES_DLY 415  // dly
+#define STR_RES_SP 416  // sp
+#define STR_RES_SPLASH 417  // splash
+#define STR_RES__FILTER 418  // filter
+#define STR_RES_PRESET 419  // preset
+#define STR_RES_EQUAL 420  // equal
+#define STR_RES_JUST 421  // just
+#define STR_RES_PYTHAG 422  // pythag
+#define STR_RES_1_4_EB 423  // 1/4 eb
+#define STR_RES_1_4_E 424  // 1/4 e
+#define STR_RES_1_4_EA 425  // 1/4 ea
+#define STR_RES_BHAIRA 426  // bhaira
+#define STR_RES_GUNAKR 427  // gunakr
+#define STR_RES_MARWA 428  // marwa
+#define STR_RES_SHREE 429  // shree
+#define STR_RES_PURVI 430  // purvi
+#define STR_RES_BILAWA 431  // bilawa
+#define STR_RES_YAMAN 432  // yaman
+#define STR_RES_KAFI 433  // kafi
+#define STR_RES_BHIMPA 434  // bhimpa
+#define STR_RES_DARBAR 435  // darbar
+#define STR_RES_BAGESH 436  // bagesh
+#define STR_RES_RAGESH 437  // ragesh
+#define STR_RES_KHAMAJ 438  // khamaj
+#define STR_RES_MIMAL 439  // mi'mal
+#define STR_RES_PARAME 440  // parame
+#define STR_RES_RANGES 441  // ranges
+#define STR_RES_GANGES 442  // ganges
+#define STR_RES_KAMESH 443  // kamesh
+#define STR_RES_PALAS_ 444  // palas
+#define STR_RES_NATBHA 445  // natbha
+#define STR_RES_M_KAUN 446  // m.kaun
+#define STR_RES_BAIRAG 447  // bairag
+#define STR_RES_B_TODI 448  // b.todi
+#define STR_RES_CHANDR 449  // chandr
+#define STR_RES_KAUSHI 450  // kaushi
+#define STR_RES_JOGESH 451  // jogesh
+#define STR_RES_RASIA 452  // rasia
 #define LUT_RES_LFO_INCREMENTS 0
 #define LUT_RES_LFO_INCREMENTS_SIZE 128
 #define LUT_RES_ENV_PORTAMENTO_INCREMENTS 1

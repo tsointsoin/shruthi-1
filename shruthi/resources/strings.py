@@ -314,7 +314,7 @@ compare
 ----
 
 v
-mutable   YA\x08.03
+mutable   YA\x08.04
 instruments \x06\x07-1
 shruthi classic
 (4 knobs)
@@ -447,6 +447,7 @@ wavquence
 oldsaw
 qpwm
 fmfb
+csaw
 
  lpf
 ssm
