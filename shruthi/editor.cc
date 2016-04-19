@@ -1173,6 +1173,50 @@ const prog_uint8_t modulation_destination_map[] PROGMEM = {
   MOD_DST_LFO_2,
 };
 
+//BER: This map defines order of oscillator shapes in UI (must match resource string order)
+const prog_uint8_t oscillator_shape_map[] PROGMEM = {
+  WAVEFORM_NONE,
+  WAVEFORM_POLYBLEP_SAW,
+  WAVEFORM_POLYBLEP_CSAW,
+  WAVEFORM_ORIGINAL_SAW,
+  WAVEFORM_POLYBLEP_PWM,
+  WAVEFORM_DIRTY_PWM,
+  WAVEFORM_TRIANGLE,
+  WAVEFORM_CZ_SAW,
+  WAVEFORM_CZ_RESO,
+  WAVEFORM_CZ_PULSE,
+  WAVEFORM_CZ_SYNC,
+  WAVEFORM_CZ_TRIANGLE,
+  WAVEFORM_QUAD_SAW_PAD,
+  WAVEFORM_QUAD_PWM,
+  WAVEFORM_FM,
+  WAVEFORM_FM_FB,
+  WAVEFORM_8BITLAND,
+  WAVEFORM_CRUSHED_SINE,
+  WAVEFORM_FILTERED_NOISE,
+  WAVEFORM_VOWEL,
+  WAVEFORM_WAVETABLE_1,
+  WAVEFORM_WAVETABLE_2,
+  WAVEFORM_WAVETABLE_3,
+  WAVEFORM_WAVETABLE_4,
+  WAVEFORM_WAVETABLE_5,
+  WAVEFORM_WAVETABLE_6,
+  WAVEFORM_WAVETABLE_7,
+  WAVEFORM_WAVETABLE_8,
+  WAVEFORM_WAVETABLE_USER,
+  WAVEFORM_WAVETABLE_9,
+  WAVEFORM_WAVETABLE_10,
+  WAVEFORM_WAVETABLE_11,
+  WAVEFORM_WAVETABLE_12,
+  WAVEFORM_WAVETABLE_13,
+  WAVEFORM_WAVETABLE_14,
+  WAVEFORM_WAVETABLE_15,
+  WAVEFORM_WAVETABLE_16,
+  WAVEFORM_WAVETABLE_17,
+  WAVEFORM_WAVETABLE_18,
+  WAVEFORM_WAVEQUENCE
+};
+
 /* static */
 void Editor::SetParameterValue(
     uint8_t index,
@@ -1191,6 +1235,10 @@ void Editor::SetParameterValue(
     if ((offset >= PRM_OP_OP1 && offset <= PRM_OP_OPERATOR) ||
         (offset >= PRM_MOD_SOURCE && offset <= PRM_MOD_AMOUNT)) {
       offset += subpage_ * 3;
+    }
+    //BER: Re-ordering of oscillators in UI with maintained patch compatibility
+    if (offset == PRM_OSC_SHAPE_1 || offset == PRM_OSC_SHAPE_2) {
+      value = pgm_read_byte(oscillator_shape_map + value);
     }
     part.SetParameter(index, offset, value, true);
   }
@@ -1213,6 +1261,15 @@ uint8_t Editor::GetParameterValue(uint8_t offset) {
     if (offset == PRM_MOD_DESTINATION) {
       for (uint8_t i = 0; i < MOD_DST_LAST; ++i) {
         if (pgm_read_byte(modulation_destination_map + i) == value) {
+          value = i;
+          break;
+        }
+      }
+    }
+    //BER: Re-ordering of oscillators in UI with maintained patch compatibility
+    if (offset == PRM_OSC_SHAPE_1 || offset == PRM_OSC_SHAPE_2) {
+      for (uint8_t i = 0; i < WAVEFORM_LAST; ++i) {
+        if (pgm_read_byte(oscillator_shape_map + i) == value) {
           value = i;
           break;
         }

@@ -72,11 +72,11 @@ uint8_t user_wavetable[129 * 8 + 1];
 uint16_t result_blep_index = increment; \
 int8_t shifts = quotient_shifts; \
 while (shifts < 0) { \
-  blep_index >>= 1; \
+  result_blep_index >>= 1; \
   ++shifts; \
 } \
 while (shifts > 0) { \
-  blep_index <<= 1; \
+  result_blep_index <<= 1; \
   --shifts; \
 } \
 result_blep_index = U16U8MulShift8(result_blep_index, quotient);

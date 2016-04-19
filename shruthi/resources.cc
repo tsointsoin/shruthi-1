@@ -295,7 +295,7 @@ static const prog_char str_res_save[] PROGMEM = "save";
 static const prog_char str_res_compare[] PROGMEM = "compare";
 static const prog_char str_res_[] PROGMEM = "----";
 static const prog_char str_res_v[] PROGMEM = "v";
-static const prog_char str_res_mutable___ya8_04[] PROGMEM = "mutable   YA.04";
+static const prog_char str_res_mutable___ya8_05[] PROGMEM = "mutable   YA.05";
 static const prog_char str_res_instruments_671[] PROGMEM = "instruments -1";
 static const prog_char str_res_shruthi_classic[] PROGMEM = "shruthi classic";
 static const prog_char str_res_4_knobs[] PROGMEM = "(4 knobs)";
@@ -370,14 +370,22 @@ static const prog_char str_res_metal[] PROGMEM = "metal";
 static const prog_char str_res_pop[] PROGMEM = "pop";
 static const prog_char str_res_none[] PROGMEM = "none";
 static const prog_char str_res_saw[] PROGMEM = "saw";
+static const prog_char str_res_csaw[] PROGMEM = "csaw";
+static const prog_char str_res_oldsaw[] PROGMEM = "oldsaw";
 static const prog_char str_res_square[] PROGMEM = "square";
+static const prog_char str_res_pwm[] PROGMEM = "pwm";
 static const prog_char str_res_triang[] PROGMEM = "triang";
 static const prog_char str_res_zsaw[] PROGMEM = "zsaw";
 static const prog_char str_res_zreso[] PROGMEM = "zreso";
-static const prog_char str_res_ztri[] PROGMEM = "ztri";
 static const prog_char str_res_zpulse[] PROGMEM = "zpulse";
 static const prog_char str_res_zsync[] PROGMEM = "zsync";
+static const prog_char str_res_ztri[] PROGMEM = "ztri";
 static const prog_char str_res_pad[] PROGMEM = "pad";
+static const prog_char str_res_qpwm[] PROGMEM = "qpwm";
+static const prog_char str_res_fmfb[] PROGMEM = "fmfb";
+static const prog_char str_res_8bits[] PROGMEM = "8bits";
+static const prog_char str_res_crush[] PROGMEM = "crush";
+static const prog_char str_res_vowel[] PROGMEM = "vowel";
 static const prog_char str_res_waves[] PROGMEM = "waves";
 static const prog_char str_res_tampur[] PROGMEM = "tampur";
 static const prog_char str_res_digitl[] PROGMEM = "digitl";
@@ -387,10 +395,6 @@ static const prog_char str_res_slap[] PROGMEM = "slap";
 static const prog_char str_res_organ[] PROGMEM = "organ";
 static const prog_char str_res_male[] PROGMEM = "male";
 static const prog_char str_res_user[] PROGMEM = "user";
-static const prog_char str_res_8bits[] PROGMEM = "8bits";
-static const prog_char str_res_crush[] PROGMEM = "crush";
-static const prog_char str_res_pwm[] PROGMEM = "pwm";
-static const prog_char str_res_vowel[] PROGMEM = "vowel";
 static const prog_char str_res_belish[] PROGMEM = "belish";
 static const prog_char str_res_polatd[] PROGMEM = "polatd";
 static const prog_char str_res_cello[] PROGMEM = "cello";
@@ -402,10 +406,6 @@ static const prog_char str_res_res3hp[] PROGMEM = "res3hp";
 static const prog_char str_res_electp[] PROGMEM = "electp";
 static const prog_char str_res_vibes[] PROGMEM = "vibes";
 static const prog_char str_res_wavquence[] PROGMEM = "wavquence";
-static const prog_char str_res_oldsaw[] PROGMEM = "oldsaw";
-static const prog_char str_res_qpwm[] PROGMEM = "qpwm";
-static const prog_char str_res_fmfb[] PROGMEM = "fmfb";
-static const prog_char str_res_csaw[] PROGMEM = "csaw";
 static const prog_char str_res_ssm[] PROGMEM = "ssm";
 static const prog_char str_res_svf[] PROGMEM = "svf";
 static const prog_char str_res_dsp[] PROGMEM = "dsp";
@@ -735,7 +735,7 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_compare,
   str_res_,
   str_res_v,
-  str_res_mutable___ya8_04,
+  str_res_mutable___ya8_05,
   str_res_instruments_671,
   str_res_shruthi_classic,
   str_res_4_knobs,
@@ -822,15 +822,24 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_pop,
   str_res_none,
   str_res_saw,
+  str_res_csaw,
+  str_res_oldsaw,
   str_res_square,
+  str_res_pwm,
   str_res_triang,
   str_res_zsaw,
   str_res_zreso,
-  str_res_ztri,
   str_res_zpulse,
   str_res_zsync,
+  str_res_ztri,
   str_res_pad,
+  str_res_qpwm,
   str_res__fm,
+  str_res_fmfb,
+  str_res_8bits,
+  str_res_crush,
+  str_res_noise,
+  str_res_vowel,
   str_res_waves,
   str_res_tampur,
   str_res_digitl,
@@ -840,11 +849,6 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_organ,
   str_res_male,
   str_res_user,
-  str_res_8bits,
-  str_res_crush,
-  str_res_pwm,
-  str_res_noise,
-  str_res_vowel,
   str_res_belish,
   str_res_polatd,
   str_res_cello,
@@ -856,10 +860,6 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_electp,
   str_res_vibes,
   str_res_wavquence,
-  str_res_oldsaw,
-  str_res_qpwm,
-  str_res_fmfb,
-  str_res_csaw,
   str_res_lpf,
   str_res_ssm,
   str_res_svf,

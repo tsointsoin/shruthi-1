@@ -314,7 +314,7 @@ compare
 ----
 
 v
-mutable   YA\x08.04
+mutable   YA\x08.05
 instruments \x06\x07-1
 shruthi classic
 (4 knobs)
@@ -410,15 +410,24 @@ pop
 
 none
 saw
+csaw
+oldsaw
 square
+pwm
 triang
 zsaw
 zreso
-ztri
 zpulse
 zsync
+ztri
 pad
+qpwm
 fm
+fmfb
+8bits
+crush
+noise
+vowel
 waves
 tampur
 digitl
@@ -428,11 +437,6 @@ slap
 organ
 male
 user
-8bits
-crush
-pwm
-noise
-vowel
 belish
 polatd
 cello
@@ -444,10 +448,6 @@ res3hp
 electp
 vibes
 wavquence
-oldsaw
-qpwm
-fmfb
-csaw
 
  lpf
 ssm
