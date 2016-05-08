@@ -202,27 +202,33 @@ void Oscillator::RenderCzSaw(uint8_t* buffer) {
   END_SAMPLE_LOOP
 }
 
-void Oscillator::RenderCzPulseReso(uint8_t* buffer) {
-  uint16_t increment = (phase_increment_.integral + (
-      (phase_increment_.integral * uint32_t(parameter_)) >> 3)) << 1;
+void Oscillator::RenderCzResoPulse(uint8_t* buffer) {
+  uint16_t increment = phase_increment_.integral + (
+      (phase_increment_.integral * uint32_t(parameter_)) >> 2);
   uint16_t phase_2 = data_.secondary_phase;
   BEGIN_SAMPLE_LOOP
     UPDATE_PHASE
     if (phase.carry) {
-      phase_2 = 32768;
+      phase_2 = (shape_ == WAVEFORM_CZ_RESO_PLS_LP) ? 0 : 32768;
     }
     phase_2 += increment;
-    uint8_t result = ReadSample(wav_res_sine, phase_2);
-    result >>= 1;
-    result += 128;   
-    if (phase.integral < 0x4000) {
-      *buffer = result;
-    } else if (phase.integral < 0x8000) {
-      *buffer = U8U8MulShift8(result, ~(phase.integral - 0x4000) >> 6);
-    } else {
-      *buffer = 0;
+    uint8_t carrier = InterpolateSample(wav_res_sine, phase_2);
+    if (shape_ == WAVEFORM_CZ_RESO_PLS_PK) {
+      carrier >>= 1;
+      carrier += 128;
     }
-    ++buffer;
+    uint8_t window = 0;
+    if (phase.integral < 0x4000) {
+      window = 255;
+    } else if (phase.integral < 0x8000) {
+      window = ~(phase.integral - 0x4000) >> 6;
+    }
+    if (shape_ == WAVEFORM_CZ_RESO_PLS_HP) {
+      *buffer++ = S8U8MulShift8(carrier + 128, window) + 128;
+    }
+    else { // WAVEFORM_CZ_RESO_PLS_LP or WAVEFORM_CZ_RESO_PLS_PK
+      *buffer++ = U8U8MulShift8(carrier, window);
+    }
   END_SAMPLE_LOOP
   data_.secondary_phase = phase_2;
 }
@@ -238,21 +244,38 @@ void Oscillator::RenderCzReso(uint8_t* buffer) {
     }
     phase_2 += increment;
     uint8_t carrier = InterpolateSample(wav_res_sine, phase_2);
-    if (shape_ == WAVEFORM_CZ_SYNC) {
+    if (shape_ == WAVEFORM_CZ_RESO_SYNC) {
       *buffer++ = phase.integral < 0x8000 ? carrier : 128;
-    } else {
+    } else { // WAVEFORM_CZ_RESO_TRI
       uint8_t window = 0;
-      if (shape_ == WAVEFORM_CZ_RESO) {
-        window = ~(phase.integral >> 8);
-      } else {
-        window = (phase.integral & 0x8000) ?
-              ~static_cast<uint8_t>(phase.integral >> 7) :
-              phase.integral >> 7;
-      }
+      window = (phase.integral & 0x8000) ?
+            ~static_cast<uint8_t>(phase.integral >> 7) :
+            phase.integral >> 7;
       *buffer++ = U8U8MulShift8(carrier, window);
     }
   END_SAMPLE_LOOP
   data_.secondary_phase = phase_2;
+}
+
+void Oscillator::RenderCzResoSaw(uint8_t* buffer) {
+  uint16_t increment = phase_increment_.integral + (
+      (phase_increment_.integral * uint32_t(parameter_)) >> 3);
+  uint16_t phase_2 = data_.secondary_phase;
+  BEGIN_SAMPLE_LOOP
+    UPDATE_PHASE
+    if (phase.carry) {
+      phase_2 = (shape_ == WAVEFORM_CZ_RESO_SAW_LP) ? 0 : 32768;
+    }
+    phase_2 += increment;
+    uint8_t carrier = InterpolateSample(wav_res_sine, phase_2);
+    uint8_t window = ~(phase.integral >> 8);
+    if (shape_ == WAVEFORM_CZ_RESO_SAW_HP) {
+      *buffer++ = S8U8MulShift8(carrier + 128, window) + 128;
+    } else { // WAVEFORM_CZ_RESO_SAW_LP or WAVEFORM_CZ_RESO_SAW_PK
+      *buffer++ = U8U8MulShift8(carrier, window);
+    }
+  END_SAMPLE_LOOP
+  data_.secondary_phase = phase_2;  
 }
 
 // ------- FM ----------------------------------------------------------------
@@ -652,9 +675,9 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderNewTriangle,
 
   &Oscillator::RenderCzSaw,
+  &Oscillator::RenderCzResoSaw,
   &Oscillator::RenderCzReso,
-  &Oscillator::RenderCzReso,
-  &Oscillator::RenderCzPulseReso,
+  &Oscillator::RenderCzResoPulse,
   &Oscillator::RenderCzReso,
 
   &Oscillator::RenderQuad,
@@ -682,7 +705,11 @@ const Oscillator::RenderFn Oscillator::fn_table_[] PROGMEM = {
   &Oscillator::RenderSimpleWavetable,
   &Oscillator::RenderQuad,
   &Oscillator::RenderFm,
-  &Oscillator::RenderPolyBlepCSaw
+  &Oscillator::RenderPolyBlepCSaw,
+  &Oscillator::RenderCzResoSaw,
+  &Oscillator::RenderCzResoSaw,
+  &Oscillator::RenderCzResoPulse,
+  &Oscillator::RenderCzResoPulse
 };
 
 }  // namespace shruthi
