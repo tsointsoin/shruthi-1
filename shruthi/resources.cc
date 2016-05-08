@@ -373,11 +373,15 @@ static const prog_char str_res_saw[] PROGMEM = "saw";
 static const prog_char str_res_csaw[] PROGMEM = "csaw";
 static const prog_char str_res_oldsaw[] PROGMEM = "oldsaw";
 static const prog_char str_res_square[] PROGMEM = "square";
-static const prog_char str_res_pwm[] PROGMEM = "pwm";
+static const prog_char str_res_dpwm[] PROGMEM = "dpwm";
 static const prog_char str_res_triang[] PROGMEM = "triang";
 static const prog_char str_res_zsaw[] PROGMEM = "zsaw";
-static const prog_char str_res_zreso[] PROGMEM = "zreso";
-static const prog_char str_res_zpulse[] PROGMEM = "zpulse";
+static const prog_char str_res_lpzsaw[] PROGMEM = "lpzsaw";
+static const prog_char str_res_pkzsaw[] PROGMEM = "pkzsaw";
+static const prog_char str_res_hpzsaw[] PROGMEM = "hpzsaw";
+static const prog_char str_res_lpzpulse[] PROGMEM = "lpzpulse";
+static const prog_char str_res_pkzpulse[] PROGMEM = "pkzpulse";
+static const prog_char str_res_hpzpulse[] PROGMEM = "hpzpulse";
 static const prog_char str_res_zsync[] PROGMEM = "zsync";
 static const prog_char str_res_ztri[] PROGMEM = "ztri";
 static const prog_char str_res_pad[] PROGMEM = "pad";
@@ -825,11 +829,15 @@ PROGMEM const prog_char* const string_table[] = {
   str_res_csaw,
   str_res_oldsaw,
   str_res_square,
-  str_res_pwm,
+  str_res_dpwm,
   str_res_triang,
   str_res_zsaw,
-  str_res_zreso,
-  str_res_zpulse,
+  str_res_lpzsaw,
+  str_res_pkzsaw,
+  str_res_hpzsaw,
+  str_res_lpzpulse,
+  str_res_pkzpulse,
+  str_res_hpzpulse,
   str_res_zsync,
   str_res_ztri,
   str_res_pad,

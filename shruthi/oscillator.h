@@ -213,8 +213,9 @@ class Oscillator {
   void RenderInterpolatedWavetable(uint8_t* buffer);
   void RenderSweepingWavetableRam(uint8_t* buffer);
   void RenderCzSaw(uint8_t* buffer);
-  void RenderCzPulseReso(uint8_t* buffer);
   void RenderCzReso(uint8_t* buffer);
+  void RenderCzResoSaw(uint8_t* buffer);
+  void RenderCzResoPulse(uint8_t* buffer);
   void RenderFm(uint8_t* buffer);
   void Render8BitLand(uint8_t* buffer);
   void RenderCrushedSine(uint8_t* buffer);
