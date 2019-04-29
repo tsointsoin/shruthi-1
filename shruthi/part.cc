@@ -92,7 +92,7 @@ void Part::Init() {
   voice_.Init();
   dirty_ = false;
   arp_seq_running_ = false;
-  clock.Update(120);
+  clock.Update(35);
   nrpn_parameter_number_ = 0xff;
 }
 
@@ -145,7 +145,7 @@ static const prog_char init_patch[] PROGMEM = {
     // Mixer
     32, 0, 0, WAVEFORM_SUB_OSC_SQUARE_1,
     // Filter
-    96, 0, 32, 0,
+    48, 0, 32, 0,
     // ADSR
     0, 50, 20, 60,
     0, 40, 90, 30,
@@ -162,9 +162,9 @@ static const prog_char init_patch[] PROGMEM = {
     MOD_SRC_VELOCITY, MOD_DST_PWM_1, 0,
     MOD_SRC_VELOCITY, MOD_DST_PWM_2, 0,
     MOD_SRC_ENV_2, MOD_DST_VCA, 63,
-    MOD_SRC_VELOCITY, MOD_DST_VCA, 16,
+    MOD_SRC_VELOCITY, MOD_DST_VCA, 0,
     MOD_SRC_PITCH_BEND, MOD_DST_VCO_1_2_COARSE, 32,
-    MOD_SRC_LFO_1, MOD_DST_VCO_1_2_COARSE, 16,
+    MOD_SRC_LFO_1, MOD_DST_VCO_1_2_COARSE, 0,
     // Name
     'i', 'n', 'i', 't', ' ', ' ', ' ', ' ',
     // Performance page assignments.
@@ -181,7 +181,8 @@ static const prog_char init_patch[] PROGMEM = {
 
 static const prog_char init_sequence[] PROGMEM = {
     // Sequencer
-    SEQUENCER_MODE_STEP, 120, 0, 0,
+//    SEQUENCER_MODE_SEQ, 35, 0, 0,
+    SEQUENCER_MODE_STEP, 35, 0, 0,
     ARPEGGIO_DIRECTION_UP, 1, 0, 7,
     
     // Pattern size and pattern
