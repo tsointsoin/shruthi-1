@@ -10,7 +10,7 @@ Various modifications :
 
 This repository was originally a copy of the Mutable Instruments GitHub Shruthi-1 repository at https://github.com/pichenettes/shruthi-1
   
-Original developer: Olivier Gillet (ol.gillet@gmail.com)
+Original developer: Emilie Gillet (emilie.o.gillet@gmail.com)
 
 The firmware is released under a GPL3.0 license. It includes a
 reimplementation of the formant synthesis algorithm used in Peter Knight's

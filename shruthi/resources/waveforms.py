@@ -65,7 +65,7 @@ JUNINESS = 1.0
 # band-limiting filter "anticipated" the discontinuity and started the
 # oscillations/ringing to smooth the discontinuity *before* it happens.
 # Such things do not exist in nature.
-# A way of avoiding this is to use a causal version of the band-limiting filter,
+7# A way of avoiding this is to use a causal version of the band-limiting filter,
 # obtained by minimum phase reconstruction of the sinc. It doesn't sound better.
 CAUSAL = False
 
