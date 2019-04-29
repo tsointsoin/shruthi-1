@@ -613,10 +613,8 @@ bool Editor::FinishLoadingPatch() {
     part.mutable_system_settings()->last_patch = n;
     part.system_settings().EepromSave();
   }
-  // When we are not playing, load the sequence parameters.
-  if (!part.running()) {
-    Storage::LoadSequence(edited_item_number());
-  }
+  // Load the sequence parameters.
+  Storage::LoadSequence(edited_item_number());
   // Reset the snap position of all pots.
   memset(snapped_, false, sizeof(snapped_));
   deferred_load_ = 0xffff;
