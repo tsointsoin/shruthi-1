@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/python2.7
 #
 # Copyright 2009 Olivier Gillet.
 #
@@ -29,8 +29,12 @@ lookup_tables = []
 
 sample_rate = 20000000.0 / 510
 control_rate = sample_rate / 40.0
-min_frequency = 1.0 / 16.0  # Hertz
-max_frequency = 100.0  # Hertz
+#min_frequency = 1.0 / 16.0  # Hertz
+#max_frequency = 100.0  # Hertz
+min_frequency = 1.0 / 160.0  # Hertz
+max_frequency = 20.0  # Hertz
+
+
 
 excursion = 65536
 num_values = 128
@@ -46,7 +50,7 @@ lookup_tables.append(
 
 
 # Create lookup table for envelope times (x^0.25).
-max_time = 12.0  # seconds
+max_time = 9.0  # seconds
 min_time = 3.0 / control_rate  # seconds
 excursion = 65535.0
 gamma = 0.175
@@ -388,13 +392,13 @@ Groove templates
 def ConvertGrooveTemplate(values):
   # Center
   values = numpy.array(values)
-  values -= values.mean()
+  values = values - values.mean()
   # Scale
   scale = numpy.abs(values).max() / 127.0
   values /= scale
   values = values.astype(int)
   # Fix rounding error
-  values[8] -= values.sum()
+  values[8] = values[8] - values.sum()
   return values
 
 lookup_tables.extend([
