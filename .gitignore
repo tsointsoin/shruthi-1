@@ -31,3 +31,6 @@ shruthi1.size
 
 # OS X crap
 .DS_Stor?
+
+# Build environment
+/avrlib/makefile.mk
