@@ -429,7 +429,7 @@ void Oscillator::RenderDirtyPwm(uint8_t* buffer) {
 }
 
 // ------- Polyblep Saw ------------------------------------------------------
-// Heavily inspired by Oliviers experimental implementation for STM but
+// Heavily inspired by Emilie's experimental implementation for STM but
 // dumbed down and much less generic (does not do polyblep for sync etc)
 void Oscillator::RenderPolyBlepSaw(uint8_t* buffer) {
   
@@ -478,7 +478,7 @@ void Oscillator::RenderPolyBlepSaw(uint8_t* buffer) {
 }
 
 // ------- Polyblep CS-80 Saw ------------------------------------------------
-// Heavily inspired by Oliviers experimental implementation for STM but
+// Heavily inspired by Emilie's experimental implementation for STM but
 // dumbed down and much less generic (does not do polyblep for sync etc)
 void Oscillator::RenderPolyBlepCSaw(uint8_t* buffer) {
 
@@ -532,7 +532,7 @@ void Oscillator::RenderPolyBlepCSaw(uint8_t* buffer) {
 }
 
 // ------- Polyblep Pwm ------------------------------------------------------
-// Heavily inspired by Oliviers experimental implementation for STM but
+// Heavily inspired by Emilie's experimental implementation for STM but
 // dumbed down and much less generic (does not do polyblep for sync etc)
 void Oscillator::RenderPolyBlepPwm(uint8_t* buffer) {
 
