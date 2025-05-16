@@ -6,7 +6,7 @@ Various modifications :
 - Sequences change even if sequencer is playing
 - Various tweaks on default patch
 - Midi clock is external by default
-
+- (SVF board only) Special modes indicators lp<,bp< and hp< have been modified to lp>,bp> and hp> to reflect what is in the official operation manual
 
 This repository was originally a copy of the Mutable Instruments GitHub Shruthi-1 repository at https://github.com/pichenettes/shruthi-1
   
