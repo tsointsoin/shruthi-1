@@ -196,9 +196,9 @@ extern const prog_uint8_t chr_res_special_characters[] PROGMEM;
 #define STR_RES_LPF 86  // lpf
 #define STR_RES_BPF 87  // bpf
 #define STR_RES_HPF 88  // hpf
-#define STR_RES_LPL 89  // lp<
-#define STR_RES_BPL 90  // bp<
-#define STR_RES_HPL 91  // hp<
+#define STR_RES_LPL 89  // lp>
+#define STR_RES_BPL 90  // bp>
+#define STR_RES_HPL 91  // hp>
 #define STR_RES_SLP 92  // +lp
 #define STR_RES_SBP 93  // +bp
 #define STR_RES_SHP 94  // +hp
